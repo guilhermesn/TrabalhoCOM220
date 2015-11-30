@@ -272,13 +272,19 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         }else if(e.getSource() == bVisualizaReserva){
             layout.show(cards, "VisualizarReserva");
         }else if(e.getSource() == bCadastrarQuarto){
-            try{
-            //this.controle.CadastraQuarto(this.precoQuarto.getText(), , );
-            }catch(Exception  erro){
-                 
-            }
-        }else if(e.getSource() == null){
-            
+            this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
+            layout.show(cards, "ConfirmaQuarto");
+        } else if (e.getSource() == bCadastrarCliente) {
+            this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
+            layout.show(cards, "ConfirmaCliente");
+        } else if (e.getSource() == bCadastrarReserva) {
+
+        } else if (e.getSource() == bVoltarQuarto) {
+            layout.show(cards, "CadastrarQuarto");
+        }else if (e.getSource() == bQuartosDisponiveis){
+            layout.show(cards, "QuartosDisponiveis");
+        }else if (e.getSource() == bVoltarCliente){
+            layout.show(cards, "CadastrarCliente");
         }
         
         
