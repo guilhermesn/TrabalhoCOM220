@@ -288,7 +288,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         }
         
         
-        
     }
 
     @Override
