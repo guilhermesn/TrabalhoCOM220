@@ -245,13 +245,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         return p1;
     }
     public JPanel gerarPConsultaCliente() {
-        /*GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
-*/
+       
         JPanel p1 = new JPanel(new BorderLayout());
 
         
@@ -271,15 +265,16 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         barraRolagem = new JScrollPane(tableTabela);
         
         panelLista.add(barraRolagem, BorderLayout.CENTER);
-        
-        
-        gc.gridx = 0;
-        gc.gridy = 0;
+
         p1.add(panelLista);
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+        
+         p1.add(BorderLayout.CENTER,panelLista);
+        p1.add(BorderLayout.SOUTH,bVoltarQuarto = new JButton("Editar Cliente"));
+        
+        p1.add(BorderLayout.CENTER,panelLista);
+        p1.add(BorderLayout.SOUTH,bVoltarQuarto = new JButton("Editar Cliente"));
+        
         bVoltarQuarto.addActionListener(this);
 
         return p1;
