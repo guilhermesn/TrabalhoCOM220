@@ -1,9 +1,10 @@
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Vector;
 
 
-public class Reserva {
+public class Reserva implements Serializable{
     private int numeroReserva;
     private Date entrada;
     private Date saida;

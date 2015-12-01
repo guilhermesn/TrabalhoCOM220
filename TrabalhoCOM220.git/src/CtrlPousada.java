@@ -1,6 +1,13 @@
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Vector;
 
 public class CtrlPousada {
 
@@ -12,6 +19,7 @@ public class CtrlPousada {
     public CtrlPousada() throws Exception {
         this.view = new VisaoPousada(this);
         view.gerarInterface();
+        
     }
 
     public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {
@@ -162,5 +170,90 @@ public class CtrlPousada {
     }
     public ArrayList<Quarto> ListarQuartos(){
         return Quartos;
+    }
+    
+    public void serializaCliente() throws Exception {
+        try{
+            FileOutputStream objFileOS = new FileOutputStream("cliente.dat");
+            ObjectOutputStream objOS = new ObjectOutputStream(objFileOS);
+            objOS.writeObject(Clientes);
+            objOS.flush();
+            objOS.close();
+            objFileOS.close();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+        
+    }
+
+    public void desserializaCliente() throws Exception {
+        try
+        {
+            File objFile = new File("cliente.dat");
+            if (objFile.exists()) {
+            FileInputStream objFileIS = new FileInputStream("cliente.dat");
+            ObjectInputStream objIS = new ObjectInputStream(objFileIS);
+            Clientes = (ArrayList) objIS.readObject();
+            objIS.close();
+        }
+         }catch(IOException ioe){
+             ioe.printStackTrace();
+          }
+    }
+    public void serializaQuarto() throws Exception {
+        try{
+            FileOutputStream objFileOS = new FileOutputStream("quarto.dat");
+            ObjectOutputStream objOS = new ObjectOutputStream(objFileOS);
+            objOS.writeObject(Quartos);
+            objOS.flush();
+            objOS.close();
+            objFileOS.close();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+        
+    }
+
+    public void desserializaQuarto() throws Exception {
+        try
+        {
+            File objFile = new File("quarto.dat");
+            if (objFile.exists()) {
+            FileInputStream objFileIS = new FileInputStream("quarto.dat");
+            ObjectInputStream objIS = new ObjectInputStream(objFileIS);
+            Quartos = (ArrayList) objIS.readObject();
+            objIS.close();
+        }
+         }catch(IOException ioe){
+             ioe.printStackTrace();
+          }
+    }
+    public void serializaReserva() throws Exception {
+        try{
+            FileOutputStream objFileOS = new FileOutputStream("reserva.dat");
+            ObjectOutputStream objOS = new ObjectOutputStream(objFileOS);
+            objOS.writeObject(Reservas);
+            objOS.flush();
+            objOS.close();
+            objFileOS.close();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
+        
+    }
+
+    public void desserializaReserva() throws Exception {
+        try
+        {
+            File objFile = new File("reserva.dat");
+            if (objFile.exists()) {
+            FileInputStream objFileIS = new FileInputStream("reserva.dat");
+            ObjectInputStream objIS = new ObjectInputStream(objFileIS);
+            Reservas = (ArrayList) objIS.readObject();
+            objIS.close();
+        }
+         }catch(IOException ioe){
+             ioe.printStackTrace();
+          }
     }
 }
