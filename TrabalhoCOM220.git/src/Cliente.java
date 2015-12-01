@@ -16,6 +16,7 @@ public class Cliente implements Serializable{
         this.telefone = telefone;
     }
 
+    
     public void setCPF(String CPF) {
         this.CPF = CPF;
     }

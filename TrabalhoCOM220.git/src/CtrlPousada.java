@@ -18,6 +18,7 @@ public class CtrlPousada {
 
     public CtrlPousada() throws Exception {
         this.view = new VisaoPousada(this);
+        view.gerarInterface();       
         view.gerarInterface();
         
     }
