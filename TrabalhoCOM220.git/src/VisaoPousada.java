@@ -6,13 +6,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 //import jdatepicker.*;
 
 public class VisaoPousada extends JFrame implements ActionListener, ListSelectionListener {
@@ -52,6 +56,12 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private javax.swing.JMenu jVisualisar;
     private javax.swing.JMenu jRelatorio;
     private javax.swing.JMenuBar jMenuBar1;
+    
+    JPanel panelLista = new JPanel();
+    JTable tableTabela;
+    final DefaultTableModel modelo = new nonEditableJTable();
+    
+    
     
     public VisaoPousada(CtrlPousada pousada) {
         this.controle = pousada;
@@ -235,18 +245,37 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         return p1;
     }
     public JPanel gerarPConsultaCliente() {
-        GridBagLayout grid = new GridBagLayout();
+        /*GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.EAST;
         gc.insets = new Insets(0, 3, 3, 0);
         gc.gridwidth = 1;
         gc.gridheight = 1;
+*/
+        JPanel p1 = new JPanel(new BorderLayout());
 
-        JPanel p1 = new JPanel(grid);
-
+        
+        
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+        tableTabela = new JTable(modelo);
+        
+        // Colunas da lista de Clientes
+        modelo.addColumn("Nome");
+        modelo.addColumn("CPF");
+        modelo.addColumn("Telefone");
+        modelo.addColumn("Endereço");
+        
+        
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+        barraRolagem = new JScrollPane(tableTabela);
+        
+        panelLista.add(barraRolagem, BorderLayout.CENTER);
+        
+        
         gc.gridx = 0;
         gc.gridy = 0;
-        p1.add(new JLabel("Clientes Cadastrados:"), gc);
+        p1.add(panelLista);
 
         gc.gridx = 0;
         gc.gridy = 1;
