@@ -41,6 +41,13 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bVoltarCliente;
     private JPanel janelaPrincipal;
 
+        
+    private javax.swing.JMenuItem jMenuCadastraQuarto;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    
     public VisaoPousada(CtrlPousada pousada) {
         this.controle = pousada;
     }
@@ -61,18 +68,47 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         GridBagConstraints gc = new GridBagConstraints();
         gc.fill = GridBagConstraints.EAST;
         gc.insets = new Insets(0, 3, 0, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
+        
+        gc.gridwidth = 0;
+        gc.gridheight = 0;
+        
+        
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuCadastraQuarto = new javax.swing.JMenuItem();
+        
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jMenu1.setText("Cadastrar");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Consultar");
+        jMenuBar1.add(jMenu2);
+        
+        jMenu3.setText("Relatorio");
+        jMenuBar1.add(jMenu3);
+        
+        //setJMenuBar(jMenuBar1);
+
+        jMenuCadastraQuarto.setText("Quarto");
+        jMenuCadastraQuarto.addActionListener(this);
+         jMenu1.add(jMenuCadastraQuarto);
+        
         JPanel principal = new JPanel(grid);
-        gc.gridx = 5;
+        
+        
+        
+        //principal.add(jMenuBar1);
+        /*gc.gridx = 5;
         gc.gridy = 0;
         principal.add(bQuartosDisponiveis = new JButton("Quartos Disponíveis"), gc);
         bQuartosDisponiveis.addActionListener(this);
         gc.gridx = 0;
         gc.gridy = 0;
-        principal.add(bCadastraCliente = new JButton("Cadastrar Cliente"), gc);
-        bCadastraCliente.addActionListener(this);
+        principal.add(jMenuBar1);//bCadastraCliente = new JButton("Cadastrar Cliente"), gc);
+        //bCadastraCliente.addActionListener(this);
         gc.gridx = 1;
         gc.gridy = 0;
         principal.add(bCadastraQuarto = new JButton("Cadastrar Quarto"), gc);
@@ -85,15 +121,17 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridy = 0;
         principal.add(bVisualizaReserva = new JButton("Visualizar reservas"), gc);
         bVisualizaReserva.addActionListener(this);
-
+*/
         janelaPrincipal = new JPanel(new BorderLayout());
-        janelaPrincipal.add(principal, BorderLayout.PAGE_START);
+        janelaPrincipal.add(jMenuBar1, BorderLayout.PAGE_START);
         janelaPrincipal.add(cards, BorderLayout.CENTER);
-
+        //janelaPrincipal.add(jMenuBar1, BorderLayout.NORTH);
         getContentPane().add(janelaPrincipal);
-        setSize(800, 300);
+        //pack();
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Pousada");
+        
         setVisible(true);
     }
 
@@ -195,7 +233,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridheight = 1;
 
         JPanel p1 = new JPanel(grid);
-
+        
         gc.gridx = 0;
         gc.gridy = 0;
         p1.add(new JLabel("Numero:"), gc);
@@ -332,7 +370,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         CardLayout layout = (CardLayout) cards.getLayout();
         if (e.getSource() == bCadastraCliente) {
             layout.show(cards, "CadastrarUsuario");
-        } else if (e.getSource() == bCadastraQuarto) {
+        } else if (e.getSource() == jMenuCadastraQuarto) {
             layout.show(cards, "CadastrarQuarto");
         } else if (e.getSource() == bCadastraReserva) {
             layout.show(cards, "FazerReserva");
