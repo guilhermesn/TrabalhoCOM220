@@ -47,8 +47,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bEditarCliente;
     private JButton bExcluirCliente;
     private JButton bVoltarCliente;
-    private JButton bEditarQuarto; 
-    private JButton bExcluirQuarto;
     
     private JPanel janelaPrincipal;
 
@@ -65,7 +63,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private javax.swing.JMenu jRelatorio;
     private javax.swing.JMenuBar jMenuBar1;
     
-    JPanel panelLista = new JPanel();
+    
     JTable tableTabela;
     DefaultTableModel modelo = new nonEditableJTable();
     
@@ -260,7 +258,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     }
     public JPanel gerarPConsultaCliente() {
        
-        panelLista = new JPanel();
+        JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
         
@@ -302,28 +300,11 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         
         return p1;
     }
-        public JPanel gerarPConsultaQuarto() {
-        
-            
-        panelLista = new JPanel();
-        JPanel p1 = new JPanel(new BorderLayout());
-        JPanel p2 = new JPanel(new FlowLayout());
-        
-        
-        JScrollPane barraRolagem; // ScrollBar para panelControle
-        modelo = new nonEditableJTable();
-        
-        modelo.addColumn("Número");
-        modelo.addColumn("Descrição");
-        modelo.addColumn("Preço");
-        
-        tableTabela = new JTable(modelo);
- 
-        
-        // Colunas da lista de Clientes
+       
         
     public JPanel gerarPConsultaQuarto() {
-           
+        
+        JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
         
