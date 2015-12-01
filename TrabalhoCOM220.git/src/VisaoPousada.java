@@ -342,25 +342,41 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     
     }
     public JPanel gerarPQuartoDisponivel() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
+        JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        
+        
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+        modelo = new nonEditableJTable();
+        tableTabela = new JTable(modelo);
+ 
+        
+        // Colunas da lista de Clientes
+        modelo.addColumn("Número");
+        modelo.addColumn("Descrição");
+        modelo.addColumn("Preço");
+        
+        
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+        barraRolagem = new JScrollPane(tableTabela);
+        
+        panelLista.add(barraRolagem, BorderLayout.CENTER);
 
-        JPanel p1 = new JPanel(grid);
+        p1.add(panelLista);
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("Quartos Disponíveis:"), gc);
-
-        gc.gridx = 0;
-        gc.gridy = 1;
-      //  p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-      //  bVoltarQuarto.addActionListener(this);
-
+        
+         p1.add(BorderLayout.CENTER,panelLista);
+        p2.add(BorderLayout.NORTH,bEditarQuarto = new JButton("Editar Quarto"));
+        p2.add(BorderLayout.NORTH,bExcluirQuarto = new JButton("Excluir Quarto"));
+        p1.add(BorderLayout.NORTH, p2);
+        
+        bEditarQuarto.addActionListener(this);
+        bExcluirQuarto.addActionListener(this);
+        
         return p1;
+        
     }
     public JPanel gerarPConfirmaCliente() {
         GridBagLayout grid = new GridBagLayout();
