@@ -41,6 +41,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bCadastrarReserva;
     private JButton bVisualizaReserva;
     private JButton bVisualizarReserva;
+    private JButton bEditarQuarto;
+    private JButton bExcluirQuarto;
+    private JButton bVoltarQuarto;
     private JButton bEditarCliente;
     private JButton bExcluirCliente;
     private JButton bVoltarCliente;
@@ -319,6 +322,21 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         
         // Colunas da lista de Clientes
         
+    public JPanel gerarPConsultaQuarto() {
+           
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        
+        
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+        modelo = new nonEditableJTable();
+        tableTabela = new JTable(modelo);
+ 
+        
+        // Colunas da lista de Clientes
+        modelo.addColumn("Número");
+        modelo.addColumn("Descrição");
+        modelo.addColumn("Preço");
         
         
         panelLista.setLayout(new BorderLayout());
