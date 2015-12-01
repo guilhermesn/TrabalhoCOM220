@@ -1,6 +1,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -41,7 +42,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bCadastrarReserva;
     private JButton bVisualizaReserva;
     private JButton bVisualizarReserva;
-    private JButton bVoltarQuarto;
+    private JButton bEditarCliente;
+    private JButton bExcluirCliente;
     private JButton bVoltarCliente;
     private JPanel janelaPrincipal;
 
@@ -60,7 +62,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     
     JPanel panelLista = new JPanel();
     JTable tableTabela;
-    final DefaultTableModel modelo = new nonEditableJTable();
+    DefaultTableModel modelo = new nonEditableJTable();
     
     
     
@@ -72,7 +74,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         cards = new JPanel();
         cards.setLayout(new CardLayout());
-        cards.add("CadastrarUsuario", gerarPCadastraCliente());
+        cards.add("CadastrarCliente", gerarPCadastraCliente());
+        cards.add("EditarCliente", gerarPCadastraCliente());
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
         cards.add("FazerReserva", gerarPReservarQuarto());
         cards.add("VisualizarReserva", gerarPVisualizarReserva());
@@ -245,19 +248,21 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 0;
         gc.gridy = 1;
-        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-        bVoltarQuarto.addActionListener(this);
+        //p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+        //bVoltarQuarto.addActionListener(this);
 
         return p1;
     }
     public JPanel gerarPConsultaCliente() {
        
         JPanel p1 = new JPanel(new BorderLayout());
-
+        JPanel p2 = new JPanel(new FlowLayout());
         
         
         JScrollPane barraRolagem; // ScrollBar para panelControle
+        modelo = new nonEditableJTable();
         tableTabela = new JTable(modelo);
+        
         
         // Colunas da lista de Clientes
         modelo.addColumn("Nome");
@@ -275,14 +280,17 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         p1.add(panelLista);
 
         
-         p1.add(BorderLayout.CENTER,panelLista);
-        p1.add(BorderLayout.SOUTH,bVoltarQuarto = new JButton("Editar Cliente"));
-        
         p1.add(BorderLayout.CENTER,panelLista);
-        p1.add(BorderLayout.SOUTH,bVoltarQuarto = new JButton("Editar Cliente"));
+        p2.add(bEditarCliente = new JButton("Editar Cliente"));
+        p2.add(bExcluirCliente = new JButton("Excluir Cliente"));
+         
+         
+        p1.add(BorderLayout.CENTER,panelLista);
+        p1.add(BorderLayout.SOUTH,p2);
         
-        bVoltarQuarto.addActionListener(this);
-
+        bEditarCliente.addActionListener(this);
+        bExcluirCliente.addActionListener(this);
+        
         return p1;
     }
     public JPanel gerarPConsultaQuarto() {
@@ -301,8 +309,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 0;
         gc.gridy = 1;
-        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-        bVoltarQuarto.addActionListener(this);
+      //  p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+      //  bVoltarQuarto.addActionListener(this);
 
         return p1;
     }
@@ -322,8 +330,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 0;
         gc.gridy = 1;
-        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-        bVoltarQuarto.addActionListener(this);
+      //  p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+      //  bVoltarQuarto.addActionListener(this);
 
         return p1;
     }
@@ -501,8 +509,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
 
-        } else if (e.getSource() == bVoltarQuarto) {
-            layout.show(cards, "CadastrarQuarto");
+      //  } else if (e.getSource() == bVoltarQuarto) {
+       //     layout.show(cards, "CadastrarQuarto");
         }else if (e.getSource() == bVoltarCliente){
             layout.show(cards, "CadastrarCliente");
         }
