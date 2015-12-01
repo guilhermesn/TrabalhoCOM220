@@ -1,6 +1,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -41,6 +42,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bCadastrarReserva;
     private JButton bVisualizaReserva;
     private JButton bVisualizarReserva;
+    private JButton bEditarQuarto;
+    private JButton bExcluirQuarto;
     private JButton bVoltarQuarto;
     private JButton bVoltarCliente;
     private JPanel janelaPrincipal;
@@ -60,7 +63,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     
     JPanel panelLista = new JPanel();
     JTable tableTabela;
-    final DefaultTableModel modelo = new nonEditableJTable();
+    DefaultTableModel modelo = new nonEditableJTable();
     
     
     
@@ -286,23 +289,38 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         return p1;
     }
     public JPanel gerarPConsultaQuarto() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
+           
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        
+        
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+        modelo = new nonEditableJTable();
+        tableTabela = new JTable(modelo);
+ 
+        
+        // Colunas da lista de Clientes
+        modelo.addColumn("Número");
+        modelo.addColumn("Descrição");
+        modelo.addColumn("Preço");
+        
+        
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+        barraRolagem = new JScrollPane(tableTabela);
+        
+        panelLista.add(barraRolagem, BorderLayout.CENTER);
 
-        JPanel p1 = new JPanel(grid);
+        p1.add(panelLista);
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("Quartos:"), gc);
-
-        gc.gridx = 0;
-        gc.gridy = 1;
-        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-        bVoltarQuarto.addActionListener(this);
+        
+         p1.add(BorderLayout.CENTER,panelLista);
+        p2.add(BorderLayout.SOUTH,bEditarQuarto = new JButton("Editar Quarto"));
+        p2.add(BorderLayout.SOUTH,bExcluirQuarto = new JButton("Excluir Quarto"));
+        p1.add(BorderLayout.SOUTH, p2);
+        
+        bEditarQuarto.addActionListener(this);
+        bExcluirQuarto.addActionListener(this);
 
         return p1;
     }
