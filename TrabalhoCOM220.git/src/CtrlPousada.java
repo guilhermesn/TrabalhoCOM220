@@ -43,17 +43,17 @@ public class CtrlPousada {
         return 0;
     }
 
-    /*  public ArrayList<Reserva> QuartoDisponiveis(Date Entrada, Date saida){
-     ArrayList<Reserva> reservasData = new ArrayList<>();
-     for(int i = 0;i<this.Reservas.size();i++){
-     if(this.Reservas.get(i).getEntrada().after(Entrada) && this.Reservas.get(i).getEntrada().before(saida)){
-     for(int j=0;j<this.Reservas.get(j).getQuartos().size();j++){
-     if(this.Reservas.get(i).getQuartos().contains(Quarto)){
-     reservasData.add(Reservas.get(i));
-     }
-     }
-     }
-     }
-     return reservasData;
-     }*/
+    public ArrayList<Reserva> QuartoDisponiveis(Date Entrada, Date saida) {
+        ArrayList<Reserva> reservasData = new ArrayList<>();
+        for (int i = 0; i < this.Reservas.size(); i++) {
+            if (this.Reservas.get(i).getEntrada().after(Entrada) && this.Reservas.get(i).getEntrada().before(saida)) {
+                for (int j = 0; j < this.Reservas.get(j).getQuartos().size(); j++) {
+                    if (this.Reservas.get(i).getQuartos().contains(j)) {
+                        reservasData.add(Reservas.get(i));
+                    }
+                }
+            }
+        }
+        return reservasData;
+    }
 }

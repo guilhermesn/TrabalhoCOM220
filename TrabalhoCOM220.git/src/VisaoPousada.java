@@ -91,7 +91,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         janelaPrincipal.add(cards, BorderLayout.CENTER);
 
         getContentPane().add(janelaPrincipal);
-        setSize(600, 300);
+        setSize(800, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Pousada");
         setVisible(true);
