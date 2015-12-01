@@ -46,6 +46,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private javax.swing.JMenuItem jMenuCadastraCliente;
     private javax.swing.JMenuItem jMenuCadastraReserva;
     private javax.swing.JMenuItem jMenuConsultaQuarto;
+    private javax.swing.JMenuItem jMenuConsultaQuartoDisponivel;
     private javax.swing.JMenuItem jMenuConsultaCliente;
     private javax.swing.JMenuItem jMenuConsultaReserva;
     private javax.swing.JMenu jCadastrar;
@@ -68,7 +69,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("VisualizarCliente", gerarPConsultaCliente());
         cards.add("VisualizarQuarto", gerarPConsultaQuarto());
         cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
-        cards.add("QuartosDisponiveis", gerarPQuartosDisponiveis());
+        cards.add("VisualizarQuartoDisponivel", gerarPQuartoDisponivel());
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         
         GridBagLayout grid = new GridBagLayout();
@@ -88,6 +89,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         jMenuCadastraCliente = new javax.swing.JMenuItem();
         jMenuCadastraReserva = new javax.swing.JMenuItem();
         jMenuConsultaQuarto = new javax.swing.JMenuItem();
+        jMenuConsultaQuartoDisponivel = new javax.swing.JMenuItem();
         jMenuConsultaCliente = new javax.swing.JMenuItem();
         jMenuConsultaReserva = new javax.swing.JMenuItem();
         
@@ -119,6 +121,10 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         jMenuConsultaQuarto.setText("Quartos");
         jMenuConsultaQuarto.addActionListener(this);
          jVisualisar.add(jMenuConsultaQuarto);
+        
+        jMenuConsultaQuartoDisponivel.setText("Quartos Disponíveis");
+        jMenuConsultaQuartoDisponivel.addActionListener(this);
+         jVisualisar.add(jMenuConsultaQuartoDisponivel);
         
         jMenuConsultaCliente.setText("Clientes");
         jMenuConsultaCliente.addActionListener(this);
@@ -276,6 +282,27 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         return p1;
     }
+    public JPanel gerarPQuartoDisponivel() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p1 = new JPanel(grid);
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        p1.add(new JLabel("Quartos Disponíveis:"), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+        bVoltarQuarto.addActionListener(this);
+
+        return p1;
+    }
     public JPanel gerarPConfirmaCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -418,26 +445,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         return p1;
     }
-    public JPanel gerarPQuartosDisponiveis(){
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
-
-        JPanel p1 = new JPanel(grid);
-
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("Lista de Quartos Disponíveis:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 0;
-        //p1.add(new JLabel(this.getquartosdisponiveis...), gc);
-
-        
-        return p1;
-    }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -452,10 +460,13 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "VisualizarReserva");
         }else if(e.getSource()== jMenuConsultaCliente){
             layout.show(cards, "VisualizarCliente");
-        
         }else if(e.getSource()== jMenuConsultaQuarto){
             layout.show(cards, "VisualizarQuarto");
-        
+            
+        }else if(e.getSource()== jMenuConsultaQuartoDisponivel){
+            layout.show(cards, "VisualizarQuartoDisponivel");
+            
+            
         }else if (e.getSource() == null ){
             layout.show(cards, null);    
         }else if (e.getSource() == bCadastrarQuarto) {
@@ -468,8 +479,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         } else if (e.getSource() == bVoltarQuarto) {
             layout.show(cards, "CadastrarQuarto");
-        }else if (e.getSource() == bQuartosDisponiveis){
-            layout.show(cards, "QuartosDisponiveis");
         }else if (e.getSource() == bVoltarCliente){
             layout.show(cards, "CadastrarCliente");
         }
