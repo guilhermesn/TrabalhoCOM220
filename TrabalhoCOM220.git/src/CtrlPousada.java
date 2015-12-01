@@ -18,9 +18,13 @@ public class CtrlPousada {
 
     public CtrlPousada() throws Exception {
         this.view = new VisaoPousada(this);
-        view.gerarInterface();       
-        view.gerarInterface();
+        view.gerarInterface();   
         
+        Quarto qt = new Quarto(28,1,"Muito bonito");
+        Quartos.add(qt);
+        Quartos.add(qt);
+        Quartos.add(qt);
+        Quartos.add(qt);
     }
 
     public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {

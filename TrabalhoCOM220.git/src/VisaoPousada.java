@@ -32,25 +32,17 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JTextField enderecoCliente = new JTextField();
     private JTextField telefoneCliente = new JTextField();
 
-    private JButton bCadastraCliente;
-    private JButton bQuartosDisponiveis;
     private JButton bCadastrarCliente;
-    private JButton bCadastraQuarto;
     private JButton bCadastrarQuarto;
-    private JButton bCadastraReserva;
     private JButton bCadastrarReserva;
-    private JButton bVisualizaReserva;
-    private JButton bVisualizarReserva;
     private JButton bEditarQuarto;
     private JButton bExcluirQuarto;
-    private JButton bVoltarQuarto;
     private JButton bEditarCliente;
     private JButton bExcluirCliente;
     private JButton bVoltarCliente;
-    
+
     private JPanel janelaPrincipal;
 
-        
     private javax.swing.JMenuItem jMenuCadastraQuarto;
     private javax.swing.JMenuItem jMenuCadastraCliente;
     private javax.swing.JMenuItem jMenuCadastraReserva;
@@ -62,23 +54,18 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private javax.swing.JMenu jVisualisar;
     private javax.swing.JMenu jRelatorio;
     private javax.swing.JMenuBar jMenuBar1;
-    
-    
+
     JTable tableTabela;
     DefaultTableModel modelo = new nonEditableJTable();
-    
-    
-    
+
     public VisaoPousada(CtrlPousada pousada) {
         this.controle = pousada;
     }
 
-    public void gerarInterface() {
-
-        cards = new JPanel();
-        cards.setLayout(new CardLayout());
+    public void atualizaInterface(){
+        
         cards.add("CadastrarCliente", gerarPCadastraCliente());
-        cards.add("EditarCliente", gerarPCadastraCliente());
+        cards.add("EditarCliente", gerarPEditarCliente());
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
         cards.add("FazerReserva", gerarPReservarQuarto());
         cards.add("VisualizarReserva", gerarPVisualizarReserva());
@@ -88,15 +75,14 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("VisualizarQuartoDisponivel", gerarPQuartoDisponivel());
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 0, 0);
+    }
+    public void gerarInterface() {
         
-        gc.gridwidth = 0;
-        gc.gridheight = 0;
+        cards = new JPanel();
+        cards.setLayout(new CardLayout());
         
-        
+        atualizaInterface();
+
         jMenuBar1 = new javax.swing.JMenuBar();
         jCadastrar = new javax.swing.JMenu();
         jVisualisar = new javax.swing.JMenu();
@@ -108,84 +94,54 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         jMenuConsultaQuartoDisponivel = new javax.swing.JMenuItem();
         jMenuConsultaCliente = new javax.swing.JMenuItem();
         jMenuConsultaReserva = new javax.swing.JMenuItem();
-        
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jCadastrar.setText("Cadastrar");
         jMenuBar1.add(jCadastrar);
 
         jVisualisar.setText("Consultar");
         jMenuBar1.add(jVisualisar);
-        
+
         jRelatorio.setText("Relatorio");
         jMenuBar1.add(jRelatorio);
-        
-        //setJMenuBar(jMenuBar1);
 
         jMenuCadastraQuarto.setText("Quarto");
         jMenuCadastraQuarto.addActionListener(this);
-         jCadastrar.add(jMenuCadastraQuarto);
-        
+        jCadastrar.add(jMenuCadastraQuarto);
+
         jMenuCadastraCliente.setText("Cliente");
         jMenuCadastraCliente.addActionListener(this);
-         jCadastrar.add(jMenuCadastraCliente);
-        
+        jCadastrar.add(jMenuCadastraCliente);
+
         jMenuCadastraReserva.setText("Reserva");
         jMenuCadastraReserva.addActionListener(this);
-         jCadastrar.add(jMenuCadastraReserva);
-        
+        jCadastrar.add(jMenuCadastraReserva);
+
         jMenuConsultaQuarto.setText("Quartos");
         jMenuConsultaQuarto.addActionListener(this);
-         jVisualisar.add(jMenuConsultaQuarto);
-        
+        jVisualisar.add(jMenuConsultaQuarto);
+
         jMenuConsultaQuartoDisponivel.setText("Quartos Disponíveis");
         jMenuConsultaQuartoDisponivel.addActionListener(this);
-         jVisualisar.add(jMenuConsultaQuartoDisponivel);
-        
+        jVisualisar.add(jMenuConsultaQuartoDisponivel);
+
         jMenuConsultaCliente.setText("Clientes");
         jMenuConsultaCliente.addActionListener(this);
-         jVisualisar.add(jMenuConsultaCliente);
-        
+        jVisualisar.add(jMenuConsultaCliente);
+
         jMenuConsultaReserva.setText("Reservas");
         jMenuConsultaReserva.addActionListener(this);
-         jVisualisar.add(jMenuConsultaReserva);
-        
-        JPanel principal = new JPanel(grid);
-        
-        
-        
-        //principal.add(jMenuBar1);
-        /*gc.gridx = 5;
-        gc.gridy = 0;
-        principal.add(bQuartosDisponiveis = new JButton("Quartos Disponíveis"), gc);
-        bQuartosDisponiveis.addActionListener(this);
-        gc.gridx = 0;
-        gc.gridy = 0;
-        principal.add(jMenuBar1);//bCadastraCliente = new JButton("Cadastrar Cliente"), gc);
-        //bCadastraCliente.addActionListener(this);
-        gc.gridx = 1;
-        gc.gridy = 0;
-        principal.add(bCadastraQuarto = new JButton("Cadastrar Quarto"), gc);
-        bCadastraQuarto.addActionListener(this);
-        gc.gridx = 2;
-        gc.gridy = 0;
-        principal.add(bCadastraReserva = new JButton("Fazer reserva"), gc);
-        bCadastraReserva.addActionListener(this);
-        gc.gridx = 3;
-        gc.gridy = 0;
-        principal.add(bVisualizaReserva = new JButton("Visualizar reservas"), gc);
-        bVisualizaReserva.addActionListener(this);
-*/
+        jVisualisar.add(jMenuConsultaReserva);
+
         janelaPrincipal = new JPanel(new BorderLayout());
         janelaPrincipal.add(jMenuBar1, BorderLayout.PAGE_START);
         janelaPrincipal.add(cards, BorderLayout.CENTER);
-        //janelaPrincipal.add(jMenuBar1, BorderLayout.NORTH);
+
         getContentPane().add(janelaPrincipal);
-        //pack();
+
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Pousada");
-        
+
         setVisible(true);
     }
 
@@ -202,6 +158,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 0;
         gc.gridy = 0;
         p1.add(new JLabel("CPF:"), gc);
+
         gc.gridx = 1;
         gc.gridy = 0;
         p1.add(cpfCliente = new JTextField(11), gc);
@@ -209,6 +166,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 0;
         gc.gridy = 1;
         p1.add(new JLabel("Nome:"), gc);
+
         gc.gridx = 1;
         gc.gridy = 1;
         p1.add(nomeCliente = new JTextField(15), gc);
@@ -235,6 +193,28 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         return p1;
     }
 
+    public JPanel gerarPEditarCliente() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p1 = new JPanel(grid);
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        p1.add(new JLabel("Quarto Cadastrado com Sucesso."), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        //p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+        //bVoltarQuarto.addActionListener(this);
+
+        return p1;
+    }
+
     public JPanel gerarPConfirmaQuarto() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -256,128 +236,125 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         return p1;
     }
+
     public JPanel gerarPConsultaCliente() {
-       
+
         JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
-        
-        
+
         JScrollPane barraRolagem; // ScrollBar para panelControle
         modelo = new nonEditableJTable();
-        
+
         modelo.addColumn("Nome");
         modelo.addColumn("CPF");
         modelo.addColumn("Telefone");
         modelo.addColumn("Endereço");
-        
+
         tableTabela = new JTable(modelo);
         barraRolagem = new JScrollPane(tableTabela);
-        
+
         // Colunas da lista de Clientes
-        
-        
-        
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
-        
-        
+
         panelLista.add(barraRolagem, BorderLayout.CENTER);
 
         p1.add(panelLista);
 
-        
-        p1.add(BorderLayout.CENTER,panelLista);
+        p1.add(BorderLayout.CENTER, panelLista);
         p2.add(bEditarCliente = new JButton("Editar Cliente"));
         p2.add(bExcluirCliente = new JButton("Excluir Cliente"));
-         
-         
-        p1.add(BorderLayout.CENTER,panelLista);
-        p1.add(BorderLayout.SOUTH,p2);
-        
+
+        p1.add(BorderLayout.CENTER, panelLista);
+        p1.add(BorderLayout.SOUTH, p2);
+
         bEditarCliente.addActionListener(this);
         bExcluirCliente.addActionListener(this);
-        
+
         return p1;
     }
-       
-        
+
     public JPanel gerarPConsultaQuarto() {
-        
+
         JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
-        
-        
+
         JScrollPane barraRolagem; // ScrollBar para panelControle
         modelo = new nonEditableJTable();
         tableTabela = new JTable(modelo);
- 
-        
+
         // Colunas da lista de Clientes
         modelo.addColumn("Número");
         modelo.addColumn("Descrição");
         modelo.addColumn("Preço");
-        
-        
+
+        for (int i = 0; i < this.controle.ListarQuartos().size(); i++) {
+            int numero = this.controle.ListarQuartos().get(i).getNumero();
+            String descricao = this.controle.ListarQuartos().get(i).getDescricao();
+            double preco = this.controle.ListarQuartos().get(i).getPreco();
+
+            Object[] dados = {numero, descricao, preco};
+            modelo.addRow(dados);
+        }
+
+        tableTabela.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
+
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
         barraRolagem = new JScrollPane(tableTabela);
-        
+
         panelLista.add(barraRolagem, BorderLayout.CENTER);
 
         p1.add(panelLista);
 
-        
-         p1.add(BorderLayout.CENTER,panelLista);
-        p2.add(BorderLayout.SOUTH,bEditarQuarto = new JButton("Editar Quarto"));
-        p2.add(BorderLayout.SOUTH,bExcluirQuarto = new JButton("Excluir Quarto"));
+        p1.add(BorderLayout.CENTER, panelLista);
+        p2.add(BorderLayout.SOUTH, bEditarQuarto = new JButton("Editar Quarto"));
+        p2.add(BorderLayout.SOUTH, bExcluirQuarto = new JButton("Excluir Quarto"));
         p1.add(BorderLayout.SOUTH, p2);
-        
+
         bEditarQuarto.addActionListener(this);
         bExcluirQuarto.addActionListener(this);
 
-
         return p1;
-    
+
     }
+
     public JPanel gerarPQuartoDisponivel() {
         JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
-        
-        
+
         JScrollPane barraRolagem; // ScrollBar para panelControle
         modelo = new nonEditableJTable();
         tableTabela = new JTable(modelo);
- 
-        
+
         // Colunas da lista de Clientes
         modelo.addColumn("Número");
         modelo.addColumn("Descrição");
         modelo.addColumn("Preço");
-        
-        
+
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
         barraRolagem = new JScrollPane(tableTabela);
-        
+
         panelLista.add(barraRolagem, BorderLayout.CENTER);
 
         p1.add(panelLista);
 
-        
-         p1.add(BorderLayout.CENTER,panelLista);
-        p2.add(BorderLayout.NORTH,bEditarQuarto = new JButton("Editar Quarto"));
-        p2.add(BorderLayout.NORTH,bExcluirQuarto = new JButton("Excluir Quarto"));
+        p1.add(BorderLayout.CENTER, panelLista);
+        p2.add(BorderLayout.NORTH, bEditarQuarto = new JButton("Editar Quarto"));
+        p2.add(BorderLayout.NORTH, bExcluirQuarto = new JButton("Excluir Quarto"));
         p1.add(BorderLayout.NORTH, p2);
-        
+
         bEditarQuarto.addActionListener(this);
         bExcluirQuarto.addActionListener(this);
-        
+
         return p1;
-        
+
     }
+
     public JPanel gerarPConfirmaCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -409,7 +386,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridheight = 1;
 
         JPanel p1 = new JPanel(grid);
-        
+
         gc.gridx = 0;
         gc.gridy = 0;
         p1.add(new JLabel("Numero:"), gc);
@@ -520,31 +497,35 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         return p1;
     }
-    
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        atualizaInterface();
         CardLayout layout = (CardLayout) cards.getLayout();
+
         if (e.getSource() == jMenuCadastraCliente) {
-            layout.show(cards, "CadastrarUsuario");
+            
+            layout.show(cards, "CadastrarCliente");
+
         } else if (e.getSource() == jMenuCadastraQuarto) {
             layout.show(cards, "CadastrarQuarto");
         } else if (e.getSource() == jMenuCadastraReserva) {
             layout.show(cards, "FazerReserva");
         } else if (e.getSource() == jMenuConsultaReserva) {
             layout.show(cards, "VisualizarReserva");
-        }else if(e.getSource()== jMenuConsultaCliente){
+        } else if (e.getSource() == jMenuConsultaCliente) {
             layout.show(cards, "VisualizarCliente");
-        }else if(e.getSource()== jMenuConsultaQuarto){
+        } else if (e.getSource() == jMenuConsultaQuarto) {
+            
+            
+            
             layout.show(cards, "VisualizarQuarto");
-            
-        }else if(e.getSource()== jMenuConsultaQuartoDisponivel){
+        } else if (e.getSource() == jMenuConsultaQuartoDisponivel) {
             layout.show(cards, "VisualizarQuartoDisponivel");
-            
-            
-        }else if (e.getSource() == null ){
-            layout.show(cards, null);    
-        }else if (e.getSource() == bCadastrarQuarto) {
+
+        } else if (e.getSource() == null) {
+            layout.show(cards, null);
+        } else if (e.getSource() == bCadastrarQuarto) {
             this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
             layout.show(cards, "ConfirmaQuarto");
         } else if (e.getSource() == bCadastrarCliente) {
@@ -552,9 +533,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
 
-      //  } else if (e.getSource() == bVoltarQuarto) {
-       //     layout.show(cards, "CadastrarQuarto");
-        }else if (e.getSource() == bVoltarCliente){
+            //  } else if (e.getSource() == bVoltarQuarto) {
+            //     layout.show(cards, "CadastrarQuarto");
+        } else if (e.getSource() == bVoltarCliente) {
             layout.show(cards, "CadastrarCliente");
         }
 
