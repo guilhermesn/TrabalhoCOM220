@@ -38,6 +38,85 @@ public class CtrlPousada {
             }
         }
     }
+    
+    public void AlterarCliente(String CPF, String nome, String endereco, String telefone)
+    {
+        for(int i = 0; i<this.Clientes.size();i++)
+        {
+            if(this.Clientes.get(i).getCPF() == CPF)
+            {
+                this.Clientes.get(i).setEndereco(endereco);
+                this.Clientes.get(i).setNome(nome);
+                this.Clientes.get(i).setTelefone(telefone);
+            }
+        }
+    }
+    public void AlterarReserva (int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf)
+    {
+        for(int i = 0; i<this.Reservas.size();i++)
+        {
+            if(this.Reservas.get(i).getNumeroReserva() == numeroReserva)
+            {
+                this.Reservas.get(i).setEntrada(entrada);
+                this.Reservas.get(i).setSaida(saida);
+            }
+        }        
+    }
+    public void RemoverReserva (int numeroReserva)
+    {
+        for(int i = 0; i<this.Reservas.size();i++)
+        {
+            if(this.Reservas.get(i).getNumeroReserva() == numeroReserva)
+            {
+                this.Reservas.remove(i);
+                
+            }
+        }       
+    }
+    public void RemoverQuarto(int nro)
+    {
+        for(int i = 0; i<this.Quartos.size();i++)
+        {
+            if(this.Quartos.get(i).getNumero() == nro)
+            {
+                this.Quartos.remove(i);
+            }
+        }
+  
+    }
+    public Quarto getQuarto(int nro)
+    {
+        for(int i = 0; i<this.Quartos.size();i++)
+        {
+            if(this.Quartos.get(i).getNumero() == nro)
+            {
+                return Quartos.get(i);
+            }
+        }
+        return null;
+    }
+    public Cliente getCliente(String cpf)
+    {
+        for(int i = 0; i<this.Clientes.size();i++)
+        {
+            if(this.Clientes.get(i).getCPF() == cpf)
+            {
+                return Clientes.get(i);
+            }
+        }
+        return null;
+    }
+    public Reserva getReserva(int nroReserva)
+    {
+        for(int i = 0; i<this.Reservas.size();i++)
+        {
+            if(this.Reservas.get(i).getNumeroReserva() == nroReserva)
+            {
+                return Reservas.get(i);
+            }
+        }   
+        return null;
+    }
 
     public double CalculaDesconto(int reserva) {
         return 0;

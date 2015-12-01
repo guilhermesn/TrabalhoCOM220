@@ -43,9 +43,14 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         
     private javax.swing.JMenuItem jMenuCadastraQuarto;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuItem jMenuCadastraCliente;
+    private javax.swing.JMenuItem jMenuCadastraReserva;
+    private javax.swing.JMenuItem jMenuConsultaQuarto;
+    private javax.swing.JMenuItem jMenuConsultaCliente;
+    private javax.swing.JMenuItem jMenuConsultaReserva;
+    private javax.swing.JMenu jCadastrar;
+    private javax.swing.JMenu jVisualisar;
+    private javax.swing.JMenu jRelatorio;
     private javax.swing.JMenuBar jMenuBar1;
     
     public VisaoPousada(CtrlPousada pousada) {
@@ -60,9 +65,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
         cards.add("FazerReserva", gerarPReservarQuarto());
         cards.add("VisualizarReserva", gerarPVisualizarReserva());
-        cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
+        //cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
         cards.add("QuartosDisponiveis", gerarPQuartosDisponiveis());
-        cards.add("ConfirmaCliente", gerarPConfirmaCliente());
+       // cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -74,27 +79,52 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         
         
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        jCadastrar = new javax.swing.JMenu();
+        jVisualisar = new javax.swing.JMenu();
+        jRelatorio = new javax.swing.JMenu();
         jMenuCadastraQuarto = new javax.swing.JMenuItem();
+        jMenuCadastraCliente = new javax.swing.JMenuItem();
+        jMenuCadastraReserva = new javax.swing.JMenuItem();
+        jMenuConsultaQuarto = new javax.swing.JMenuItem();
+        jMenuConsultaCliente = new javax.swing.JMenuItem();
+        jMenuConsultaReserva = new javax.swing.JMenuItem();
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setText("Cadastrar");
-        jMenuBar1.add(jMenu1);
+        jCadastrar.setText("Cadastrar");
+        jMenuBar1.add(jCadastrar);
 
-        jMenu2.setText("Consultar");
-        jMenuBar1.add(jMenu2);
+        jVisualisar.setText("Consultar");
+        jMenuBar1.add(jVisualisar);
         
-        jMenu3.setText("Relatorio");
-        jMenuBar1.add(jMenu3);
+        jRelatorio.setText("Relatorio");
+        jMenuBar1.add(jRelatorio);
         
         //setJMenuBar(jMenuBar1);
 
         jMenuCadastraQuarto.setText("Quarto");
         jMenuCadastraQuarto.addActionListener(this);
-         jMenu1.add(jMenuCadastraQuarto);
+         jCadastrar.add(jMenuCadastraQuarto);
+        
+        jMenuCadastraCliente.setText("Cliente");
+        jMenuCadastraCliente.addActionListener(this);
+         jCadastrar.add(jMenuCadastraCliente);
+        
+        jMenuCadastraReserva.setText("Reserva");
+        jMenuCadastraReserva.addActionListener(this);
+         jCadastrar.add(jMenuCadastraReserva);
+        
+        jMenuConsultaQuarto.setText("Quartos");
+        jMenuConsultaQuarto.addActionListener(this);
+         jVisualisar.add(jMenuConsultaQuarto);
+        
+        jMenuConsultaCliente.setText("Clientes");
+        jMenuConsultaCliente.addActionListener(this);
+         jVisualisar.add(jMenuConsultaCliente);
+        
+        jMenuConsultaReserva.setText("Reservas");
+        jMenuConsultaReserva.addActionListener(this);
+         jVisualisar.add(jMenuConsultaReserva);
         
         JPanel principal = new JPanel(grid);
         
@@ -368,15 +398,21 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     @Override
     public void actionPerformed(ActionEvent e) {
         CardLayout layout = (CardLayout) cards.getLayout();
-        if (e.getSource() == bCadastraCliente) {
+        if (e.getSource() == jMenuCadastraCliente) {
             layout.show(cards, "CadastrarUsuario");
         } else if (e.getSource() == jMenuCadastraQuarto) {
             layout.show(cards, "CadastrarQuarto");
-        } else if (e.getSource() == bCadastraReserva) {
+        } else if (e.getSource() == jMenuCadastraReserva) {
             layout.show(cards, "FazerReserva");
-        } else if (e.getSource() == bVisualizaReserva) {
+        } else if (e.getSource() == jMenuConsultaReserva) {
             layout.show(cards, "VisualizarReserva");
-        } else if (e.getSource() == bCadastrarQuarto) {
+        }else if (e.getSource() == null ){
+            layout.show(cards, null);
+       
+            
+            
+            
+        }else if (e.getSource() == bCadastrarQuarto) {
             this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
             layout.show(cards, "ConfirmaQuarto");
         } else if (e.getSource() == bCadastrarCliente) {
