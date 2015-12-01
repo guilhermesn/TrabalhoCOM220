@@ -65,9 +65,11 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
         cards.add("FazerReserva", gerarPReservarQuarto());
         cards.add("VisualizarReserva", gerarPVisualizarReserva());
-        //cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
+        cards.add("VisualizarCliente", gerarPConsultaCliente());
+        cards.add("VisualizarQuarto", gerarPConsultaQuarto());
+        cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
         cards.add("QuartosDisponiveis", gerarPQuartosDisponiveis());
-       // cards.add("ConfirmaCliente", gerarPConfirmaCliente());
+        cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -224,6 +226,48 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 0;
         gc.gridy = 0;
         p1.add(new JLabel("Quarto Cadastrado com Sucesso."), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+        bVoltarQuarto.addActionListener(this);
+
+        return p1;
+    }
+    public JPanel gerarPConsultaCliente() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p1 = new JPanel(grid);
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        p1.add(new JLabel("Clientes Cadastrados:"), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
+        bVoltarQuarto.addActionListener(this);
+
+        return p1;
+    }
+    public JPanel gerarPConsultaQuarto() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p1 = new JPanel(grid);
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        p1.add(new JLabel("Quartos:"), gc);
 
         gc.gridx = 0;
         gc.gridy = 1;
@@ -406,12 +450,14 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "FazerReserva");
         } else if (e.getSource() == jMenuConsultaReserva) {
             layout.show(cards, "VisualizarReserva");
+        }else if(e.getSource()== jMenuConsultaCliente){
+            layout.show(cards, "VisualizarCliente");
+        
+        }else if(e.getSource()== jMenuConsultaQuarto){
+            layout.show(cards, "VisualizarQuarto");
+        
         }else if (e.getSource() == null ){
-            layout.show(cards, null);
-       
-            
-            
-            
+            layout.show(cards, null);    
         }else if (e.getSource() == bCadastrarQuarto) {
             this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
             layout.show(cards, "ConfirmaQuarto");
