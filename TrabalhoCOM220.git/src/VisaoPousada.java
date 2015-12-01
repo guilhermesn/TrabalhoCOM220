@@ -18,7 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-//import jdatepicker.*;
 
 public class VisaoPousada extends JFrame implements ActionListener, ListSelectionListener {
 
@@ -45,6 +44,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bEditarCliente;
     private JButton bExcluirCliente;
     private JButton bVoltarCliente;
+    private JButton bEditarQuarto; 
+    private JButton bExcluirQuarto;
+    
     private JPanel janelaPrincipal;
 
         
@@ -255,25 +257,29 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     }
     public JPanel gerarPConsultaCliente() {
        
+        panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
         
         
         JScrollPane barraRolagem; // ScrollBar para panelControle
         modelo = new nonEditableJTable();
-        tableTabela = new JTable(modelo);
         
-        
-        // Colunas da lista de Clientes
         modelo.addColumn("Nome");
         modelo.addColumn("CPF");
         modelo.addColumn("Telefone");
         modelo.addColumn("Endereço");
         
+        tableTabela = new JTable(modelo);
+        barraRolagem = new JScrollPane(tableTabela);
+        
+        // Colunas da lista de Clientes
+        
+        
         
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
-        barraRolagem = new JScrollPane(tableTabela);
+        
         
         panelLista.add(barraRolagem, BorderLayout.CENTER);
 
@@ -293,26 +299,48 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         
         return p1;
     }
-    public JPanel gerarPConsultaQuarto() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
+        public JPanel gerarPConsultaQuarto() {
+        
+            
+        panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        
+        
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+        modelo = new nonEditableJTable();
+        
+        modelo.addColumn("Número");
+        modelo.addColumn("Descrição");
+        modelo.addColumn("Preço");
+        
+        tableTabela = new JTable(modelo);
+ 
+        
+        // Colunas da lista de Clientes
+        
+        
+        
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+        barraRolagem = new JScrollPane(tableTabela);
+        
+        panelLista.add(barraRolagem, BorderLayout.CENTER);
 
-        JPanel p1 = new JPanel(grid);
+        p1.add(panelLista);
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("Quartos:"), gc);
+        
+         p1.add(BorderLayout.CENTER,panelLista);
+        p2.add(BorderLayout.SOUTH,bEditarQuarto = new JButton("Editar Quarto"));
+        p2.add(BorderLayout.SOUTH,bExcluirQuarto = new JButton("Excluir Quarto"));
+        p1.add(BorderLayout.SOUTH, p2);
+        
+        bEditarQuarto.addActionListener(this);
+        bExcluirQuarto.addActionListener(this);
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-      //  p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-      //  bVoltarQuarto.addActionListener(this);
 
         return p1;
+    
     }
     public JPanel gerarPQuartoDisponivel() {
         GridBagLayout grid = new GridBagLayout();
