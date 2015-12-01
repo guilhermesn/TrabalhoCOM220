@@ -118,8 +118,18 @@ public class CtrlPousada {
         return null;
     }
 
-    public double CalculaDesconto(int reserva) {
-        return 0;
+    public double CalculaDesconto(int nroReserva, int desconto) {
+        double total=0;
+        for(int i = 0; i<this.Reservas.size();i++)
+        {
+            if(this.Reservas.get(i).getNumeroReserva() == nroReserva)
+            {
+                total = (Reservas.get(i).getDiarias().getValor() + Reservas.get(i).getPgtReserva().getValor())*(desconto/100);
+                return total;
+            }
+        }   
+        
+        return total;
     }
 
     public ArrayList<Reserva> QuartoDisponiveis(Date Entrada, Date saida) {
@@ -134,5 +144,11 @@ public class CtrlPousada {
             }
         }
         return reservasData;
+    }
+    public ArrayList<Reserva> ListarReservas(){
+        return Reservas;
+    }
+    public ArrayList<Quarto> ListarQuartos(){
+        return Quartos;
     }
 }
