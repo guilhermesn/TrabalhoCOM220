@@ -23,8 +23,11 @@ public class CtrlPousada {
         Quarto qt = new Quarto(28,1,"Muito bonito");
         Cliente ct = new Cliente("23432","asdfasdf","rqwrr4334r","23fqfdf");
         Quartos.add(qt);
+        qt = new Quarto(299,2,"Muito nossa");
         Quartos.add(qt);
+        qt = new Quarto(29,3,"Muito feio");
         Quartos.add(qt);
+        qt = new Quarto(26,4,"Muito fumante");
         Quartos.add(qt);
         Clientes.add(ct);
         Clientes.add(ct);
