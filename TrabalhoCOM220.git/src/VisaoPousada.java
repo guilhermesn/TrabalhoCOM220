@@ -145,11 +145,19 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         bCadastrarCliente = new JButton("Cadastrar");
         bEditarCliente = new JButton("Editar Cliente");
         bExcluirCliente = new JButton("Excluir Cliente");
+        bCadastrarReserva = new JButton("Cadastrar");
+        bEditarQuarto = new JButton("Editar Quarto");
+        bExcluirQuarto = new JButton("Excluir Quarto");
+    
         
-        
+        bCadastrarQuarto.addActionListener(this);
+        bVoltarCliente.addActionListener(this);
         bCadastrarCliente.addActionListener(this);
         bEditarCliente.addActionListener(this);
         bExcluirCliente.addActionListener(this);
+        bCadastrarReserva.addActionListener(this);
+        bEditarQuarto.addActionListener(this);
+        bExcluirQuarto.addActionListener(this);
         
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
@@ -339,8 +347,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         p1.add(panelLista);
 
         p1.add(BorderLayout.CENTER, panelLista);
-        p2.add(BorderLayout.SOUTH, bEditarQuarto = new JButton("Editar Quarto"));
-        p2.add(BorderLayout.SOUTH, bExcluirQuarto = new JButton("Excluir Quarto"));
+        p2.add(BorderLayout.SOUTH, bEditarQuarto);
+        p2.add(BorderLayout.SOUTH, bExcluirQuarto);
         p1.add(BorderLayout.SOUTH, p2);
 
        
