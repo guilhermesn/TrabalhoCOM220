@@ -7,8 +7,14 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 public class VisaoPousada extends JFrame implements ActionListener, ListSelectionListener {
 
@@ -31,6 +38,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JTextField nomeCliente = new JTextField();
     private JTextField enderecoCliente = new JTextField();
     private JTextField telefoneCliente = new JTextField();
+
+    private JFormattedTextField dataInicial;
+    private JFormattedTextField dataFinal;
 
     private JButton bCadastrarCliente;
     private JButton bCadastrarQuarto;
@@ -57,14 +67,15 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
     JTable tableTabela;
     DefaultTableModel modelo = new nonEditableJTable();
+    DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
 
     public VisaoPousada(CtrlPousada pousada) {
         iniciaBotoes();
         this.controle = pousada;
     }
 
-    public void atualizaInterface(){
-        
+    public void atualizaInterface() {
+
         cards.add("CadastrarCliente", gerarPCadastraCliente());
         cards.add("EditarCliente", gerarPEditarCliente());
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
@@ -75,10 +86,11 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
         cards.add("VisualizarQuartoDisponivel", gerarPQuartoDisponivel());
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
-        
+
     }
-    private void iniciaBotoes(){
-        
+
+    private void iniciaBotoes() {
+
         jMenuBar1 = new javax.swing.JMenuBar();
         jCadastrar = new javax.swing.JMenu();
         jVisualisar = new javax.swing.JMenu();
@@ -127,19 +139,18 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         jMenuConsultaReserva.setText("Reservas");
         jMenuConsultaReserva.addActionListener(this);
         jVisualisar.add(jMenuConsultaReserva);
-        
+
         bCadastrarQuarto = new JButton("Cadastrar");
         bVoltarCliente = new JButton("Voltar");
         bCadastrarCliente = new JButton("Cadastrar");
     }
+
     public void gerarInterface() {
-        
+
         cards = new JPanel();
         cards.setLayout(new CardLayout());
         iniciaBotoes();
         atualizaInterface();
-        
-        
 
         janelaPrincipal = new JPanel(new BorderLayout());
         janelaPrincipal.add(jMenuBar1, BorderLayout.PAGE_START);
@@ -196,7 +207,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 4;
-        p1.add(bCadastrarCliente , gc);
+        p1.add(bCadastrarCliente, gc);
         bCadastrarCliente.addActionListener(this);
 
         return p1;
@@ -271,7 +282,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             Object[] dados = {numero, descricao, preco};
             modelo.addRow(dados);
         }
-        
+
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
 
@@ -357,13 +368,24 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         barraRolagem = new JScrollPane(tableTabela);
 
         panelLista.add(barraRolagem, BorderLayout.CENTER);
+        dataInicial = new JFormattedTextField(df);
+        dataFinal = new JFormattedTextField(df);
 
         p1.add(panelLista);
-
+        dataInicial.setColumns(10);
+        dataFinal.setColumns(10);
         p1.add(BorderLayout.CENTER, panelLista);
-        p2.add(BorderLayout.NORTH, bEditarQuarto = new JButton("Editar Quarto"));
-        p2.add(BorderLayout.NORTH, bExcluirQuarto = new JButton("Excluir Quarto"));
+        p2.add(BorderLayout.NORTH, dataInicial);
+        p2.add(BorderLayout.NORTH, dataFinal);
         p1.add(BorderLayout.NORTH, p2);
+        try {
+            MaskFormatter dateMask = new MaskFormatter("##/##/####");
+            dateMask.install(dataInicial);
+            dateMask.install(dataFinal);
+        } catch (ParseException ex) {
+           // Logger.getLogger(MaskFormatterTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
 
         bEditarQuarto.addActionListener(this);
         bExcluirQuarto.addActionListener(this);
@@ -470,7 +492,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 3;
-       // p1.add(bCadastrarCliente = new JButton("Cadastrar"), gc);
+        // p1.add(bCadastrarCliente = new JButton("Cadastrar"), gc);
 //        bCadastrarCliente.addActionListener(this);
 
         return p1;
@@ -510,7 +532,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 1;
         gc.gridy = 3;
 //        p1.add(bCadastrarCliente = new JButton("Visualizar"), gc);
-  //      bCadastrarCliente.addActionListener(this);
+        //      bCadastrarCliente.addActionListener(this);
 
         return p1;
     }
@@ -521,7 +543,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         CardLayout layout = (CardLayout) cards.getLayout();
 
         if (e.getSource() == jMenuCadastraCliente) {
-            
+
             layout.show(cards, "CadastrarCliente");
 
         } else if (e.getSource() == jMenuCadastraQuarto) {
@@ -532,7 +554,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "VisualizarReserva");
         } else if (e.getSource() == jMenuConsultaCliente) {
             layout.show(cards, "VisualizarCliente");
-        } else if (e.getSource() == jMenuConsultaQuarto) {           
+        } else if (e.getSource() == jMenuConsultaQuarto) {
             layout.show(cards, "VisualizarQuarto");
         } else if (e.getSource() == jMenuConsultaQuartoDisponivel) {
             layout.show(cards, "VisualizarQuartoDisponivel");
