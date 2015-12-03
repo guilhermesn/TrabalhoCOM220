@@ -51,7 +51,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bEditarCliente;
     private JButton bExcluirCliente;
     private JButton bVoltarCliente;
-private JButton bModificarQuarto;
+    private JButton bVoltarQuarto;
+
     private JPanel janelaPrincipal;
     private JButton bVoltarQuarto;
 
@@ -151,8 +152,8 @@ private JButton bModificarQuarto;
         bCadastrarReserva = new JButton("Cadastrar");
         bEditarQuarto = new JButton("Editar Quarto");
         bExcluirQuarto = new JButton("Excluir Quarto");
-        bModificarQuarto  = new JButton("Altera Quarto");
-        bVoltarQuarto = new JButton("Voltar");
+        bVoltarQuarto = new JButton ("Voltar");
+    
         
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -162,7 +163,6 @@ private JButton bModificarQuarto;
         bCadastrarReserva.addActionListener(this);
         bEditarQuarto.addActionListener(this);
         bExcluirQuarto.addActionListener(this);
-        bModificarQuarto.addActionListener(this);
         bVoltarQuarto.addActionListener(this);
         
         cpfCliente = new JTextField(11);
@@ -646,9 +646,7 @@ private JButton bModificarQuarto;
             layout.show(cards, "EditarQuarto");
         } else if (e.getSource() == bVoltarCliente) {
             layout.show(cards, "CadastrarCliente");
-        } else if (e.getSource() == bModificarQuarto) {
-            layout.show(cards, "CadastrarCliente");
-        } else if (e.getSource() == bVoltarQuarto) {
+        }else if (e.getSource() == bVoltarQuarto) {
             layout.show(cards, "CadastrarQuarto");
         }
     }
