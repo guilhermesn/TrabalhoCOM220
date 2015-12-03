@@ -56,6 +56,7 @@ public class CtrlPousada {
             if (this.Quartos.get(i).getNumero() == numero) {
                 this.Quartos.get(i).setDescricao(descricao);
                 this.Quartos.get(i).setPreco(preco);
+                break;
             }
         }
     }
@@ -69,6 +70,7 @@ public class CtrlPousada {
                 this.Clientes.get(i).setEndereco(endereco);
                 this.Clientes.get(i).setNome(nome);
                 this.Clientes.get(i).setTelefone(telefone);
+                break;
             }
         }
     }
@@ -80,6 +82,7 @@ public class CtrlPousada {
             {
                 this.Reservas.get(i).setEntrada(entrada);
                 this.Reservas.get(i).setSaida(saida);
+                break;
             }
         }        
     }
@@ -90,7 +93,7 @@ public class CtrlPousada {
             if(this.Reservas.get(i).getNumeroReserva() == numeroReserva)
             {
                 this.Reservas.remove(i);
-                
+                break;
             }
         }       
     }
@@ -101,6 +104,19 @@ public class CtrlPousada {
             if(this.Quartos.get(i).getNumero() == nro)
             {
                 this.Quartos.remove(i);
+                break;
+            }
+        }
+  
+    }
+    public void RemoverCliente(String CPF)
+    {
+        for(int i = 0; i<this.Clientes.size();i++)
+        {
+            if(this.Clientes.get(i).getCPF()== CPF)
+            {
+                this.Clientes.remove(i);
+                break;
             }
         }
   
