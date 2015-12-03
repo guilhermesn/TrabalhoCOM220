@@ -52,9 +52,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bExcluirCliente;
     private JButton bVoltarCliente;
     private JButton bVoltarQuarto;
+    private JButton bModificarQuarto;
 
     private JPanel janelaPrincipal;
-    private JButton bVoltarQuarto;
 
     private javax.swing.JMenuItem jMenuCadastraQuarto;
     private javax.swing.JMenuItem jMenuCadastraCliente;
@@ -153,7 +153,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         bEditarQuarto = new JButton("Editar Quarto");
         bExcluirQuarto = new JButton("Excluir Quarto");
         bVoltarQuarto = new JButton ("Voltar");
-    
+    bModificarQuarto= new JButton ("Modificar");
         
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -164,6 +164,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         bEditarQuarto.addActionListener(this);
         bExcluirQuarto.addActionListener(this);
         bVoltarQuarto.addActionListener(this);
+        bModificarQuarto.addActionListener(this);
+        
         
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
