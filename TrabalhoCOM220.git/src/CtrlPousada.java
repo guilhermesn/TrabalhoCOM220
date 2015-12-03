@@ -177,6 +177,9 @@ public class CtrlPousada {
         return Quartos;
     }
     
+     public ArrayList<Cliente> ListaClientes(){
+        return Clientes;
+    }   
     public void serializaCliente() throws Exception {
         try{
             FileOutputStream objFileOS = new FileOutputStream("cliente.dat");

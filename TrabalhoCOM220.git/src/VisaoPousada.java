@@ -59,6 +59,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     DefaultTableModel modelo = new nonEditableJTable();
 
     public VisaoPousada(CtrlPousada pousada) {
+        iniciaBotoes();
         this.controle = pousada;
     }
 
@@ -76,13 +77,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         
     }
-    public void gerarInterface() {
+    private void iniciaBotoes(){
         
-        cards = new JPanel();
-        cards.setLayout(new CardLayout());
-        
-        atualizaInterface();
-
         jMenuBar1 = new javax.swing.JMenuBar();
         jCadastrar = new javax.swing.JMenu();
         jVisualisar = new javax.swing.JMenu();
@@ -131,6 +127,19 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         jMenuConsultaReserva.setText("Reservas");
         jMenuConsultaReserva.addActionListener(this);
         jVisualisar.add(jMenuConsultaReserva);
+        
+        bCadastrarQuarto = new JButton("Cadastrar");
+        bVoltarCliente = new JButton("Voltar");
+        bCadastrarCliente = new JButton("Cadastrar");
+    }
+    public void gerarInterface() {
+        
+        cards = new JPanel();
+        cards.setLayout(new CardLayout());
+        iniciaBotoes();
+        atualizaInterface();
+        
+        
 
         janelaPrincipal = new JPanel(new BorderLayout());
         janelaPrincipal.add(jMenuBar1, BorderLayout.PAGE_START);
@@ -187,7 +196,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 4;
-        p1.add(bCadastrarCliente = new JButton("Cadastrar"), gc);
+        p1.add(bCadastrarCliente , gc);
         bCadastrarCliente.addActionListener(this);
 
         return p1;
@@ -254,7 +263,15 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         tableTabela = new JTable(modelo);
         barraRolagem = new JScrollPane(tableTabela);
 
-        // Colunas da lista de Clientes
+        for (int i = 0; i < this.controle.ListaClientes().size(); i++) {
+            int numero = this.controle.ListarQuartos().get(i).getNumero();
+            String descricao = this.controle.ListarQuartos().get(i).getDescricao();
+            double preco = this.controle.ListarQuartos().get(i).getPreco();
+
+            Object[] dados = {numero, descricao, preco};
+            modelo.addRow(dados);
+        }
+        
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
 
@@ -371,7 +388,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 0;
         gc.gridy = 1;
-        p1.add(bVoltarCliente = new JButton("Voltar"), gc);
+        p1.add(bVoltarCliente, gc);
         bVoltarCliente.addActionListener(this);
 
         return p1;
@@ -410,7 +427,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 3;
-        p1.add(bCadastrarQuarto = new JButton("Cadastrar"), gc);
+        p1.add(bCadastrarQuarto, gc);
         bCadastrarQuarto.addActionListener(this);
 
         return p1;
@@ -453,8 +470,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 3;
-        p1.add(bCadastrarCliente = new JButton("Cadastrar"), gc);
-        bCadastrarCliente.addActionListener(this);
+       // p1.add(bCadastrarCliente = new JButton("Cadastrar"), gc);
+//        bCadastrarCliente.addActionListener(this);
 
         return p1;
     }
@@ -492,8 +509,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 3;
-        p1.add(bCadastrarCliente = new JButton("Visualizar"), gc);
-        bCadastrarCliente.addActionListener(this);
+//        p1.add(bCadastrarCliente = new JButton("Visualizar"), gc);
+  //      bCadastrarCliente.addActionListener(this);
 
         return p1;
     }
@@ -515,10 +532,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "VisualizarReserva");
         } else if (e.getSource() == jMenuConsultaCliente) {
             layout.show(cards, "VisualizarCliente");
-        } else if (e.getSource() == jMenuConsultaQuarto) {
-            
-            
-            
+        } else if (e.getSource() == jMenuConsultaQuarto) {           
             layout.show(cards, "VisualizarQuarto");
         } else if (e.getSource() == jMenuConsultaQuartoDisponivel) {
             layout.show(cards, "VisualizarQuartoDisponivel");
@@ -526,19 +540,19 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         } else if (e.getSource() == null) {
             layout.show(cards, null);
         } else if (e.getSource() == bCadastrarQuarto) {
-            this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
+            //this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
+            System.out.println("rodou");
             layout.show(cards, "ConfirmaQuarto");
         } else if (e.getSource() == bCadastrarCliente) {
+            System.out.println("rodou");
             this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
-
             //  } else if (e.getSource() == bVoltarQuarto) {
             //     layout.show(cards, "CadastrarQuarto");
         } else if (e.getSource() == bVoltarCliente) {
             layout.show(cards, "CadastrarCliente");
         }
-
     }
 
     @Override
