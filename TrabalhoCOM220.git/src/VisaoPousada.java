@@ -152,7 +152,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         bExcluirCliente.addActionListener(this);
         
         cpfCliente = new JTextField(11);
-        
+        nomeCliente = new JTextField(15);
+        enderecoCliente = new JTextField(20);
+        telefoneCliente = new JTextField(15);
     }
 
     public void gerarInterface() {
@@ -200,21 +202,21 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 1;
-        p1.add(nomeCliente = new JTextField(15), gc);
+        p1.add(nomeCliente, gc);
 
         gc.gridx = 0;
         gc.gridy = 2;
         p1.add(new JLabel("Endereço:"), gc);
         gc.gridx = 1;
         gc.gridy = 2;
-        p1.add(enderecoCliente = new JTextField(20), gc);
+        p1.add(enderecoCliente, gc);
 
         gc.gridx = 0;
         gc.gridy = 3;
         p1.add(new JLabel("Telefone:"), gc);
         gc.gridx = 1;
         gc.gridy = 3;
-        p1.add(enderecoCliente = new JTextField(15), gc);
+        p1.add(telefoneCliente, gc);
 
         gc.gridx = 1;
         gc.gridy = 4;
@@ -561,6 +563,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         } else if (e.getSource() == bCadastrarCliente) {
             this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
              cpfCliente = new JTextField(11);
+             nomeCliente = new JTextField(15);
+             enderecoCliente = new JTextField(20);
+             telefoneCliente = new JTextField(15);
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
             
