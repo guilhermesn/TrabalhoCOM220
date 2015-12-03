@@ -21,7 +21,7 @@ public class CtrlPousada {
         view.gerarInterface();   
         
         Quarto qt = new Quarto(28,1,"Muito bonito");
-        Cliente ct = new Cliente("23432","asdfasdf","rqwrr4334r","23fqfdf");
+        
         Quartos.add(qt);
         qt = new Quarto(299,2,"Muito nossa");
         Quartos.add(qt);
@@ -29,8 +29,12 @@ public class CtrlPousada {
         Quartos.add(qt);
         qt = new Quarto(26,4,"Muito fumante");
         Quartos.add(qt);
+        
+        Cliente ct = new Cliente("23432","Chupita","Rua do fror","91195472");
         Clientes.add(ct);
+        ct = new Cliente("33355","Markito","Rua Nois vai","35914445");
         Clientes.add(ct);
+        ct = new Cliente("5888","Iza folgada","Rua Nois vei","36225588");
         Clientes.add(ct);
         
     }
