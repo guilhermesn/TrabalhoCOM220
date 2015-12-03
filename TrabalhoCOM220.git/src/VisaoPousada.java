@@ -219,9 +219,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 1;
         gc.gridy = 4;
         p1.add(bCadastrarCliente, gc);
-        bCadastrarCliente.addActionListener(this);
-
-        p1.add(bCadastrarCliente , gc);
         return p1;
     }
 
@@ -261,8 +258,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 0;
         gc.gridy = 1;
-        //p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-        //bVoltarQuarto.addActionListener(this);
 
         return p1;
     }
@@ -346,8 +341,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         p2.add(BorderLayout.SOUTH, bExcluirQuarto = new JButton("Excluir Quarto"));
         p1.add(BorderLayout.SOUTH, p2);
 
-        bEditarQuarto.addActionListener(this);
-        bExcluirQuarto.addActionListener(this);
+       
 
         return p1;
 
@@ -391,8 +385,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         }
         
 
-        bEditarQuarto.addActionListener(this);
-        bExcluirQuarto.addActionListener(this);
 
         return p1;
 
@@ -415,7 +407,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 0;
         gc.gridy = 1;
         p1.add(bVoltarCliente, gc);
-        bVoltarCliente.addActionListener(this);
+       
 
         return p1;
     }
@@ -454,7 +446,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 1;
         gc.gridy = 3;
         p1.add(bCadastrarQuarto, gc);
-        bCadastrarQuarto.addActionListener(this);
 
         return p1;
     }
@@ -496,8 +487,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 3;
-        // p1.add(bCadastrarCliente = new JButton("Cadastrar"), gc);
-//        bCadastrarCliente.addActionListener(this);
 
         return p1;
     }
@@ -535,8 +524,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 3;
-//        p1.add(bCadastrarCliente = new JButton("Visualizar"), gc);
-        //      bCadastrarCliente.addActionListener(this);
 
         return p1;
     }
@@ -573,12 +560,12 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "ConfirmaQuarto");
         } else if (e.getSource() == bCadastrarCliente) {
             this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
+             cpfCliente = new JTextField(11);
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
-            //  } else if (e.getSource() == bVoltarQuarto) {
-            //     layout.show(cards, "CadastrarQuarto");
+            
         } else if (e.getSource() == bVoltarCliente) {
-            cpfCliente = new JTextField(11);
+           
             layout.show(cards, "CadastrarCliente");
         }
     }
