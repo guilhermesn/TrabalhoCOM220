@@ -53,6 +53,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
     private JButton bVoltarCliente;
 private JButton bModificarQuarto;
     private JPanel janelaPrincipal;
+    private JButton bVoltarQuarto;
 
     private javax.swing.JMenuItem jMenuCadastraQuarto;
     private javax.swing.JMenuItem jMenuCadastraCliente;
@@ -150,7 +151,8 @@ private JButton bModificarQuarto;
         bCadastrarReserva = new JButton("Cadastrar");
         bEditarQuarto = new JButton("Editar Quarto");
         bExcluirQuarto = new JButton("Excluir Quarto");
-        bModificarQuarto  = new JButton("Altera Quarto"); 
+        bModificarQuarto  = new JButton("Altera Quarto");
+        bVoltarQuarto = new JButton("Voltar");
         
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -161,10 +163,15 @@ private JButton bModificarQuarto;
         bEditarQuarto.addActionListener(this);
         bExcluirQuarto.addActionListener(this);
         bModificarQuarto.addActionListener(this);
+        bVoltarQuarto.addActionListener(this);
+        
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
         enderecoCliente = new JTextField(20);
         telefoneCliente = new JTextField(15);
+        numeroQuarto = new JTextField(5);
+        precoQuarto = new JTextField(10);
+        descricaoQuarto = new JTextField(25);
     }
 
     public void gerarInterface() {
@@ -270,6 +277,7 @@ private JButton bModificarQuarto;
 
         gc.gridx = 0;
         gc.gridy = 1;
+        p1.add(bVoltarQuarto, gc);
 
         return p1;
     }
@@ -453,21 +461,21 @@ private JButton bModificarQuarto;
         p1.add(new JLabel("Numero:"), gc);
         gc.gridx = 1;
         gc.gridy = 0;
-        p1.add(numeroQuarto = new JTextField(5), gc);
+        p1.add(numeroQuarto, gc);
 
         gc.gridx = 0;
         gc.gridy = 1;
         p1.add(new JLabel("Preco:"), gc);
         gc.gridx = 1;
         gc.gridy = 1;
-        p1.add(precoQuarto = new JTextField(10), gc);
+        p1.add(precoQuarto, gc);
 
         gc.gridx = 0;
         gc.gridy = 2;
         p1.add(new JLabel("Descrição:"), gc);
         gc.gridx = 1;
         gc.gridy = 2;
-        p1.add(descricaoQuarto = new JTextField(25), gc);
+        p1.add(descricaoQuarto, gc);
 
         gc.gridx = 1;
         gc.gridy = 3;
@@ -621,7 +629,9 @@ private JButton bModificarQuarto;
             layout.show(cards, null);
         } else if (e.getSource() == bCadastrarQuarto) {
             //this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
-            System.out.println("rodou");
+            numeroQuarto = new JTextField(5);
+            precoQuarto = new JTextField(10);
+            descricaoQuarto = new JTextField(25);
             layout.show(cards, "ConfirmaQuarto");
         } else if (e.getSource() == bCadastrarCliente) {
             this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
@@ -638,6 +648,8 @@ private JButton bModificarQuarto;
             layout.show(cards, "CadastrarCliente");
         } else if (e.getSource() == bModificarQuarto) {
             layout.show(cards, "CadastrarCliente");
+        } else if (e.getSource() == bVoltarQuarto) {
+            layout.show(cards, "CadastrarQuarto");
         }
     }
 
