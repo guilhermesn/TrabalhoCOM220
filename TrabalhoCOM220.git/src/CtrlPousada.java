@@ -21,10 +21,15 @@ public class CtrlPousada {
         view.gerarInterface();   
         
         Quarto qt = new Quarto(28,1,"Muito bonito");
+        Cliente ct = new Cliente("23432","asdfasdf","rqwrr4334r","23fqfdf");
         Quartos.add(qt);
         Quartos.add(qt);
         Quartos.add(qt);
         Quartos.add(qt);
+        Clientes.add(ct);
+        Clientes.add(ct);
+        Clientes.add(ct);
+        
     }
 
     public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {

@@ -131,11 +131,22 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         bCadastrarQuarto = new JButton("Cadastrar");
         bVoltarCliente = new JButton("Voltar");
         bCadastrarCliente = new JButton("Cadastrar");
+        bEditarCliente = new JButton("Editar Cliente");
+        bExcluirCliente = new JButton("Excluir Cliente");
+        
+        
+        bCadastrarCliente.addActionListener(this);
+        bEditarCliente.addActionListener(this);
+        bExcluirCliente.addActionListener(this);
+        
+        cpfCliente = new JTextField(11);
+        
     }
     public void gerarInterface() {
         
         cards = new JPanel();
         cards.setLayout(new CardLayout());
+        
         iniciaBotoes();
         atualizaInterface();
         
@@ -170,7 +181,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 1;
         gc.gridy = 0;
-        p1.add(cpfCliente = new JTextField(11), gc);
+        p1.add(cpfCliente, gc);
 
         gc.gridx = 0;
         gc.gridy = 1;
@@ -197,8 +208,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         gc.gridx = 1;
         gc.gridy = 4;
         p1.add(bCadastrarCliente , gc);
-        bCadastrarCliente.addActionListener(this);
-
         return p1;
     }
 
@@ -218,8 +227,6 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         gc.gridx = 0;
         gc.gridy = 1;
-        //p1.add(bVoltarQuarto = new JButton("Voltar"), gc);
-        //bVoltarQuarto.addActionListener(this);
 
         return p1;
     }
@@ -264,11 +271,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         barraRolagem = new JScrollPane(tableTabela);
 
         for (int i = 0; i < this.controle.ListaClientes().size(); i++) {
-            int numero = this.controle.ListarQuartos().get(i).getNumero();
-            String descricao = this.controle.ListarQuartos().get(i).getDescricao();
-            double preco = this.controle.ListarQuartos().get(i).getPreco();
-
-            Object[] dados = {numero, descricao, preco};
+            Object[] dados = {this.controle.ListaClientes().get(i).getNome(), this.controle.ListaClientes().get(i).getCPF(), this.controle.ListaClientes().get(i).getTelefone(),this.controle.ListaClientes().get(i).getEndereco()};
             modelo.addRow(dados);
         }
         
@@ -280,14 +283,12 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         p1.add(panelLista);
 
         p1.add(BorderLayout.CENTER, panelLista);
-        p2.add(bEditarCliente = new JButton("Editar Cliente"));
-        p2.add(bExcluirCliente = new JButton("Excluir Cliente"));
+        p2.add(bEditarCliente);
+        p2.add(bExcluirCliente);
 
         p1.add(BorderLayout.CENTER, panelLista);
         p1.add(BorderLayout.SOUTH, p2);
 
-        bEditarCliente.addActionListener(this);
-        bExcluirCliente.addActionListener(this);
 
         return p1;
     }
@@ -517,8 +518,10 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        
         atualizaInterface();
-        CardLayout layout = (CardLayout) cards.getLayout();
+        CardLayout layout;
+        layout = (CardLayout) cards.getLayout();
 
         if (e.getSource() == jMenuCadastraCliente) {
             
@@ -544,13 +547,13 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             System.out.println("rodou");
             layout.show(cards, "ConfirmaQuarto");
         } else if (e.getSource() == bCadastrarCliente) {
-            System.out.println("rodou");
             this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
             //  } else if (e.getSource() == bVoltarQuarto) {
             //     layout.show(cards, "CadastrarQuarto");
         } else if (e.getSource() == bVoltarCliente) {
+            cpfCliente = new JTextField(11);
             layout.show(cards, "CadastrarCliente");
         }
     }
