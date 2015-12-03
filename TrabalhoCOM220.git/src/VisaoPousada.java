@@ -86,7 +86,7 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         cards.add("ConfirmaQuarto", gerarPConfirmaQuarto());
         cards.add("VisualizarQuartoDisponivel", gerarPQuartoDisponivel());
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
-
+        cards.add("EditarQuarto", gerarPEditarQuarto());
     }
 
     private void iniciaBotoes() {
@@ -498,6 +498,8 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
 
         return p1;
     }
+    
+    
 
     public JPanel gerarPVisualizarReserva() {
         GridBagLayout grid = new GridBagLayout();
@@ -536,6 +538,42 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
         return p1;
     }
 
+    public JPanel gerarPEditarQuarto() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p1 = new JPanel(grid);
+
+        gc.gridx = 0;
+        gc.gridy = 0;
+        p1.add(new JLabel("Data de entrada:"), gc);
+        gc.gridx = 1;
+        gc.gridy = 0;
+        p1.add(numeroQuarto = new JTextField(5), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        p1.add(new JLabel("Data de Saida:"), gc);
+        gc.gridx = 1;
+        gc.gridy = 1;
+        p1.add(precoQuarto = new JTextField(10), gc);
+
+        gc.gridx = 0;
+        gc.gridy = 2;
+        p1.add(new JLabel("Quarto:"), gc);
+        gc.gridx = 1;
+        gc.gridy = 2;
+        p1.add(descricaoQuarto = new JTextField(25), gc);
+
+        gc.gridx = 1;
+        gc.gridy = 3;
+
+        return p1;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         
@@ -572,8 +610,9 @@ public class VisaoPousada extends JFrame implements ActionListener, ListSelectio
             layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bCadastrarReserva) {
             
+        } else if (e.getSource() == bEditarQuarto) {
+            layout.show(cards, "ConfirmaCliente");
         } else if (e.getSource() == bVoltarCliente) {
-           
             layout.show(cards, "CadastrarCliente");
         }
     }
