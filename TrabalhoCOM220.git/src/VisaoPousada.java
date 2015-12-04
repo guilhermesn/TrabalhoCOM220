@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,11 +42,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTextField nomeCliente = new JTextField();
     private JTextField enderecoCliente = new JTextField();
     private JTextField telefoneCliente = new JTextField();
-    
+
     private JTextField EdtNomeCliente = new JTextField();
     private JTextField EdtEnderecoCliente = new JTextField();
     private JTextField EdtTelefoneCliente = new JTextField();
-    
+
     private JFormattedTextField dataInicial;
     private JFormattedTextField dataFinal;
 
@@ -60,8 +61,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JButton bVoltarCliente;
     private JButton bVoltarQuarto;
     private JButton bModificarQuarto;
+    private JButton bPesquisarQuartoDisponiveis;
+    private JButton bReservarQuartoDisponiveis;
 
     private JPanel janelaPrincipal;
+    private JComboBox jCBCliente = new javax.swing.JComboBox();
 
     private javax.swing.JMenuItem jMenuCadastraQuarto;
     private javax.swing.JMenuItem jMenuCadastraCliente;
@@ -80,8 +84,13 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaQuarto;
     private JTable jTabelaCliente;
     private JTable jTabelaQuartoDisp;
+    private JTable jTabelaQuartoDispRes;
+     private JTable jTabelaQuartoARes;
+
     private DefaultTableModel modelo = new nonEditableJTable();
     private DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+    private DefaultTableModel modelo2 = new nonEditableJTable();
+    private DefaultTableModel modelo1 = new nonEditableJTable();
 
     public VisaoPousada(CtrlPousada pousada) {
         iniciaBotoes();
@@ -166,6 +175,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bExcluirQuarto = new JButton("Excluir Quarto");
         bVoltarQuarto = new JButton("Voltar");
         bModificarQuarto = new JButton("Modificar");
+        bPesquisarQuartoDisponiveis = new JButton("Pesquisar");
+        bReservarQuartoDisponiveis = new JButton("Reservar");
 
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -178,6 +189,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bExcluirQuarto.addActionListener(this);
         bVoltarQuarto.addActionListener(this);
         bModificarQuarto.addActionListener(this);
+        bPesquisarQuartoDisponiveis.addActionListener(this);
+        bReservarQuartoDisponiveis.addActionListener(this);
 
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
@@ -205,14 +218,13 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         getContentPane().add(janelaPrincipal);
 
-        setSize(800, 500);
+        setSize(950, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Pousada");
 
         setVisible(true);
     }
-    
-    
+
     public JPanel gerarPCadastraCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -275,13 +287,13 @@ public class VisaoPousada extends JFrame implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 0;
         p1.add(new JLabel(NEditCPF), gc);
-        
+
         if (NEditCPF != null) {
             EdtNomeCliente.setText(controle.getCliente(NEditCPF).getEndereco());
             EdtEnderecoCliente.setText(controle.getCliente(NEditCPF).getEndereco());
             EdtTelefoneCliente.setText(controle.getCliente(NEditCPF).getTelefone());
         }
-        
+
         gc.gridx = 0;
         gc.gridy = 1;
         p1.add(new JLabel("Nome:"), gc);
@@ -380,6 +392,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         JPanel p2 = new JPanel(new FlowLayout());
 
         JScrollPane barraRolagem; // ScrollBar para panelControle
+
         modelo = new nonEditableJTable();
         jTabelaQuarto = new JTable(modelo);
 
@@ -398,10 +411,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
         }
 
         jTabelaQuarto.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
+        barraRolagem = new JScrollPane(jTabelaQuarto);
 
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
-        barraRolagem = new JScrollPane(jTabelaQuarto);
 
         panelLista.add(barraRolagem, BorderLayout.CENTER);
 
@@ -444,6 +457,9 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p1.add(BorderLayout.CENTER, panelLista);
         p2.add(BorderLayout.NORTH, dataInicial);
         p2.add(BorderLayout.NORTH, dataFinal);
+        p2.add(BorderLayout.NORTH, bPesquisarQuartoDisponiveis);
+        p1.add(BorderLayout.SOUTH, bReservarQuartoDisponiveis);
+
         p1.add(BorderLayout.NORTH, p2);
         try {
             MaskFormatter dateMask = new MaskFormatter("##/##/####");
@@ -517,44 +533,118 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public JPanel gerarPReservarQuarto() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
-        //UtilDateModel model = new UtilDateModel();
-        //JDatePanelImpl datePanel = new JDatePanelImpl(model);
-        //JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
 
-        //frame.add(datePicker);
-        JPanel p1 = new JPanel(grid);
+        JPanel panelLista1 = new JPanel();
+        JPanel panelLista2 = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        JPanel p3 = new JPanel(new FlowLayout());
+        
+        JPanel p4 = new JPanel(new BorderLayout());
+        JPanel p5 = new JPanel(new BorderLayout());
+        JPanel p6 = new JPanel(new FlowLayout());
+        
+        JScrollPane barraRolagem1; // ScrollBar para panelControle
+        JScrollPane barraRolagem2;
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("Data de entrada:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 0;
-        p1.add(numeroQuarto = new JTextField(5), gc);
+        modelo2 = new nonEditableJTable();
+        modelo1 = new nonEditableJTable();
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-        p1.add(new JLabel("Data de Saida:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 1;
-        p1.add(precoQuarto = new JTextField(10), gc);
+        jTabelaQuartoDispRes = new JTable(modelo2);
+        jTabelaQuartoARes = new JTable(modelo1);
 
-        gc.gridx = 0;
-        gc.gridy = 2;
-        p1.add(new JLabel("Quartos:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 2;
-        p1.add(descricaoQuarto = new JTextField(25), gc);
+        // Colunas da lista de Clientes
+        modelo2.addColumn("Número");
+        modelo2.addColumn("Descrição");
+        modelo2.addColumn("Preço");
 
-        gc.gridx = 1;
-        gc.gridy = 3;
+        modelo1.addColumn("Número");
+        modelo1.addColumn("Descrição");
+        modelo1.addColumn("Preço");
+        
+        JButton button1 = new JButton("Reservar -->>");
+	JButton button2 = new JButton("<<-- Remover");	
+        button1.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+                                    Object[] dados = {jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 0).toString(), jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 1).toString(), jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 2).toString()};
+                                    modelo1.addRow(dados);
+                                    modelo2.removeRow(jTabelaQuartoDispRes.getSelectedRow());
+                                    jTabelaQuartoDispRes.getSelectionModel().setSelectionInterval(0, 0);
+			}
+		});
+        
+        button2.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object[] dados = {jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 0).toString(), jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 1).toString(), jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 2).toString()};
+                                    modelo2.addRow(dados);
+                                    modelo1.removeRow(jTabelaQuartoARes.getSelectedRow());
+                                    jTabelaQuartoARes.getSelectionModel().setSelectionInterval(0, 0);
+			}
+		});
+        for (int i = 0; i < this.controle.ListarQuartos().size(); i++) {
+            int numero = this.controle.ListarQuartos().get(i).getNumero();
+            String descricao = this.controle.ListarQuartos().get(i).getDescricao();
+            double preco = this.controle.ListarQuartos().get(i).getPreco();
 
+            Object[] dados = {numero, descricao, preco};
+            modelo2.addRow(dados);
+        }
+
+        for (int i = 0; i < this.controle.ListaClientes().size(); i++) {
+            //Object[] dados = {this.controle.ListaClientes().get(i).getNome(), this.controle.ListaClientes().get(i).getCPF(), this.controle.ListaClientes().get(i).getTelefone(), this.controle.ListaClientes().get(i).getEndereco()};
+            //jCBCliente.add(dados);
+
+            jCBCliente.addItem(this.controle.ListaClientes().get(i).getNome() + " " + this.controle.ListaClientes().get(i).getCPF());
+            //modelo1.addRow(dados);
+        }
+
+        jTabelaQuartoDispRes.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
+        jTabelaQuartoARes.getSelectionModel().setSelectionInterval(0, 0);
+        barraRolagem1 = new JScrollPane(jTabelaQuartoDispRes);
+        barraRolagem2 = new JScrollPane(jTabelaQuartoARes);
+
+        panelLista1.setLayout(new BorderLayout());
+        panelLista1.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+
+        panelLista2.setLayout(new BorderLayout());
+        panelLista2.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+
+        dataInicial = new JFormattedTextField(df);
+        dataFinal = new JFormattedTextField(df);
+        dataInicial.setColumns(10);
+        dataFinal.setColumns(10);
+        p2.add(new JLabel("Data inicial:"));
+        p2.add(dataInicial);
+        p2.add(new JLabel("    Data Final:"));
+        p2.add(dataFinal);
+        p2.add(new JLabel("    Cliente:"));
+        p2.add(jCBCliente);
+        
+        p4.add(new JLabel("      Quartos livres:"),BorderLayout.NORTH);
+        p4.add(panelLista1,BorderLayout.CENTER);
+        
+        p5.add(new JLabel("      Quartos a serem rezervados:"),BorderLayout.NORTH);
+        p5.add(panelLista2,BorderLayout.CENTER);
+        
+        p6.add(button1);
+        p6.add(button2);
+        try {
+            MaskFormatter dateMask = new MaskFormatter("##/##/####");
+            dateMask.install(dataInicial);
+            dateMask.install(dataFinal);
+        } catch (ParseException ex) {
+            // Logger.getLogger(MaskFormatterTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        panelLista1.add(barraRolagem1, BorderLayout.CENTER);
+        panelLista2.add(barraRolagem2, BorderLayout.CENTER);
+        
+        p1.add(BorderLayout.CENTER, p6);
+        p1.add(BorderLayout.EAST, p5);
+        p1.add(BorderLayout.WEST, p4);
+        p1.add(BorderLayout.NORTH, p2);
         return p1;
+
     }
 
     public JPanel gerarPVisualizarReserva() {
@@ -593,8 +683,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         return p1;
     }
-    
-    
+
     public JPanel gerarPEditarQuarto() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -684,7 +773,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "VisualizarQuartoDisponivel");
-            
+
         } else if (e.getSource() == bCadastrarQuarto) {
             //this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
             numeroQuarto = new JTextField(5);
@@ -730,7 +819,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
             numeroQuarto = new JTextField(5);
             precoQuarto = new JTextField(10);
             descricaoQuarto = new JTextField(25);
-            
+
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "CadastrarQuarto");
@@ -752,8 +841,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "EditarCliente");
-        }else if (e.getSource() == bEditaCliente) {
-            
+        } else if (e.getSource() == bEditaCliente) {
+
             this.controle.AlterarCliente(NEditCPF, this.EdtNomeCliente.getText(), this.EdtEnderecoCliente.getText(), this.EdtTelefoneCliente.getText());
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
