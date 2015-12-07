@@ -195,7 +195,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         bReservarQuartoDisponiveis = new JButton("Reservar");
         bEditarReserva = new JButton("Editar Reserva");
-        bExcluirReserva = new JButton("Excluir Reserva");
 
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -211,7 +210,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         bReservarQuartoDisponiveis.addActionListener(this);
         bEditarReserva.addActionListener(this);
-        bExcluirReserva.addActionListener(this);
 
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
@@ -867,7 +865,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
         JPanel p2 = new JPanel(new FlowLayout());
 
         JScrollPane barraRolagem; // ScrollBar para panelControle
-
+        bExcluirReserva = new JButton("Excluir Reserva");
+         
         modelo = new nonEditableJTable();
         jTabelaReserva = new JTable(modelo);
 
@@ -887,7 +886,23 @@ public class VisaoPousada extends JFrame implements ActionListener {
             Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(),controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()),controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()),controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
             modelo.addRow(dados);
         }
-
+        
+        
+        bExcluirReserva.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
+                int comfirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja deletar a reserva?");
+                 if(comfirmacao==0){
+                     modelo.removeRow(jTabelaReserva.getSelectedRow());
+                 }
+               
+                 
+            }
+        });
+       
+        
+        
+        
         jTabelaReserva.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
         barraRolagem = new JScrollPane(jTabelaReserva);
 
@@ -1071,8 +1086,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
             layout.show(cards, "VisualizarCliente");
         } else if (e.getSource() == bEditarReserva) {
 
-        } else if (e.getSource() == bExcluirReserva) {
-
-        }
+        } 
     }
 }
