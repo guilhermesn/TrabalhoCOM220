@@ -72,9 +72,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JButton bVoltarCliente;
     private JButton bVoltarQuarto;
     private JButton bModificarQuarto;
-
+    private JButton bPagarReserva;
+    
     private JButton bReservarQuartoDisponiveis;
-    private JButton bEditarReserva;
+
     private JButton bExcluirReserva;
 
     private JPanel janelaPrincipal;
@@ -116,9 +117,9 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public void atualizaInterface() {
-        
+
         JTF_data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
-        
+
         cards.add("CadastrarCliente", gerarPCadastraCliente());
         cards.add("EditarCliente", gerarPEditarCliente());
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
@@ -148,8 +149,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuConsultaCliente = new javax.swing.JMenuItem();
         jMenuConsultaReserva = new javax.swing.JMenuItem();
         jMenuPagamento = new javax.swing.JMenuItem();
-                
-                
+
         jCadastrar.setText("Cadastrar");
         jMenuBar1.add(jCadastrar);
 
@@ -182,15 +182,14 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuConsultaCliente.setText("Clientes");
         jMenuConsultaCliente.addActionListener(this);
         jVisualisar.add(jMenuConsultaCliente);
-        
-        
+
         jMenuConsultaReserva.setText("Reservas");
         jMenuConsultaReserva.addActionListener(this);
         jMenuPagamento.setText("Pagamentos");
         jMenuPagamento.addActionListener(this);
         jVisualisar.add(jMenuConsultaReserva);
         jCadastrar.add(jMenuPagamento);
-        
+
         bCadastrarQuarto = new JButton("Cadastrar");
         bVoltarCliente = new JButton("Voltar");
         bCadastrarCliente = new JButton("Cadastrar");
@@ -203,7 +202,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bModificarQuarto = new JButton("Modificar");
 
         bReservarQuartoDisponiveis = new JButton("Reservar");
-        bEditarReserva = new JButton("Editar Reserva");
 
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -217,7 +215,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bModificarQuarto.addActionListener(this);
 
         bReservarQuartoDisponiveis.addActionListener(this);
-        bEditarReserva.addActionListener(this);
 
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
@@ -297,21 +294,62 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p1.add(bCadastrarCliente, gc);
         return p1;
     }
-    
-    public JPanel gerarPRealizarPagamento() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
 
-        JPanel p1 = new JPanel(grid);
+    public JPanel gerarPRealizarPagamento() {
+         JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+       
+        modeloVRes = new nonEditableJTable();
+        jTabelaReserva = new JTable(modeloVRes);
+
+        // Colunas da lista de Clientes
+        modeloVRes.addColumn("Numero");
+        modeloVRes.addColumn("Entrada");
+        modeloVRes.addColumn("Saida");
+        modeloVRes.addColumn("Cliente");
+        modeloVRes.addColumn("Quartos");
+        modeloVRes.addColumn("Valor Pago");
+        modeloVRes.addColumn("Valor Restante");
+        modeloVRes.addColumn("Desconto");
+        modeloVRes.addColumn("Estado");
+        
+         bPagarReserva = new JButton("Realizar pagamento");
+         
+        for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
+
+            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
+            modeloVRes.addRow(dados);
+        }
+
+        bPagarReserva.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
+                String valor = JOptionPane.showInputDialog(null, "Para garantir a reserva  o valor minimo a ser pago é: " + (controle.getReserva(Integer.parseInt(numeroReserva)).getDiarias().getValorTotal()-controle.getReserva(Integer.parseInt(numeroReserva)).getDiarias().getValorPg()-controle.CalculaDesconto(Integer.parseInt(numeroReserva)))+ "\nO valor total a ser pago é: " +controle.CalculaValAPG(Integer.parseInt(numeroReserva)) );
+                controle.realizaPagamento(Integer.parseInt(numeroReserva),Double.parseDouble(valor));
+
+            }
+        });
+
+        jTabelaReserva.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
+        barraRolagem = new JScrollPane(jTabelaReserva);
+
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+
+        panelLista.add(barraRolagem, BorderLayout.CENTER);
+
+        p1.add(panelLista);
+
+        p1.add(BorderLayout.CENTER, panelLista);
+
+        p2.add(BorderLayout.SOUTH, bPagarReserva);
+        p1.add(BorderLayout.SOUTH, p2);
 
         return p1;
     }
 
-    
     public JPanel gerarPEditarCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -462,13 +500,12 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p1.add(panelLista);
         bExcluirQuarto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int comfirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja excluir o quarto?");
-                 if(comfirmacao==0){
-                      controle.RemoverQuarto(Integer.parseInt(jTabelaQuarto.getValueAt(jTabelaQuarto.getSelectedRow(), 0).toString()));
-                      modeloQuartos.removeRow(jTabelaQuarto.getSelectedRow());
-                 }
-               
-                 
+                int comfirmacao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir o quarto?");
+                if (comfirmacao == 0) {
+                    controle.RemoverQuarto(Integer.parseInt(jTabelaQuarto.getValueAt(jTabelaQuarto.getSelectedRow(), 0).toString()));
+                    modeloQuartos.removeRow(jTabelaQuarto.getSelectedRow());
+                }
+
             }
         });
         p1.add(BorderLayout.CENTER, panelLista);
@@ -542,14 +579,13 @@ public class VisaoPousada extends JFrame implements ActionListener {
         barraRolagem = new JScrollPane(jTabelaQuartoDisp);
 
         panelLista.add(barraRolagem, BorderLayout.CENTER);
-        
-        
+
         dataInicial.setText(JTF_data);
-         dataFinal.setText(JTF_data);
-                
+        dataFinal.setText(JTF_data);
+
         p1.add(panelLista);
         p1.add(BorderLayout.CENTER, panelLista);
-        p2.add(BorderLayout.NORTH, dataInicial );
+        p2.add(BorderLayout.NORTH, dataInicial);
         p2.add(BorderLayout.NORTH, dataFinal);
         p2.add(BorderLayout.NORTH, bPesquisarQuartoDisponiveis);
         p1.add(BorderLayout.SOUTH, bReservarQuartoDisponiveis);
@@ -625,7 +661,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         gc.insets = new Insets(0, 3, 3, 0);
         gc.gridwidth = 1;
         gc.gridheight = 1;
-        SpinnerNumberModel model =new SpinnerNumberModel(10,0,100,1);
+        SpinnerNumberModel model = new SpinnerNumberModel(10, 0, 100, 1);
         final JSpinner jSDesconto = new JSpinner();
         jSDesconto.setModel(model);
         MaskFormatter mascaraData = null;
@@ -696,11 +732,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
                     }
 
-                    controle.CadastrarReserva(dateini, datefim, (int)jSDesconto.getValue(), controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
+                    controle.CadastrarReserva(dateini, datefim, (int) jSDesconto.getValue(), controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
                     for (int i = modelo1.getRowCount(); i > 0; i--) {
                         modelo1.removeRow(0);
                     }
-                    JOptionPane.showMessageDialog(null,"Reserva realizada com sucesso!");
+                    JOptionPane.showMessageDialog(null, "Reserva realizada com sucesso!");
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -735,7 +771,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
                 valorDiarias.setText("0.0");
             }
         });
@@ -746,7 +782,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 modelo1.addRow(dados);
                 modelo2.removeRow(jTabelaQuartoDispRes.getSelectedRow());
                 jTabelaQuartoDispRes.getSelectionModel().setSelectionInterval(0, 0);
-                
+
                 Date dateini = new Date();
                 Date datefim = new Date();
                 ArrayList<Quarto> vectorQuartos = new ArrayList<>();
@@ -754,8 +790,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     dateini = formatter.parse(dataInicio.getText());
                     datefim = formatter.parse(dataFim.getText());
-               
-                
 
                     for (int i = 0; i < jTabelaQuartoARes.getRowCount(); i++) {
 
@@ -767,11 +801,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
                         }
 
                     }
-                   
-                     }catch (ParseException ex) {
+
+                } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                 valorDiarias.setText(""+(controle.TotalDiarias(dateini, datefim, vectorQuartos)));
+                valorDiarias.setText("" + (controle.TotalDiarias(dateini, datefim, vectorQuartos)));
             }
         });
 
@@ -781,7 +815,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 modelo2.addRow(dados);
                 modelo1.removeRow(jTabelaQuartoARes.getSelectedRow());
                 jTabelaQuartoARes.getSelectionModel().setSelectionInterval(0, 0);
-                
+
                 Date dateini = new Date();
                 Date datefim = new Date();
                 ArrayList<Quarto> vectorQuartos = new ArrayList<>();
@@ -789,8 +823,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     dateini = formatter.parse(dataInicio.getText());
                     datefim = formatter.parse(dataFim.getText());
-               
-                
 
                     for (int i = 0; i < jTabelaQuartoARes.getRowCount(); i++) {
 
@@ -802,12 +834,12 @@ public class VisaoPousada extends JFrame implements ActionListener {
                         }
 
                     }
-                   
-                     }catch (ParseException ex) {
+
+                } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                 valorDiarias.setText(""+(controle.TotalDiarias(dateini, datefim, vectorQuartos)));
-                 
+                valorDiarias.setText("" + (controle.TotalDiarias(dateini, datefim, vectorQuartos)));
+
             }
         });
 
@@ -825,12 +857,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         panelLista2.setLayout(new BorderLayout());
         panelLista2.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
-        
-        
+
         dataInicio.setText(JTF_data);
         dataFim.setText(JTF_data);
-         
-         
+
         p2.add(new JLabel("Data inicial:"));
         p2.add(dataInicio);
         p2.add(new JLabel("    Data Final:"));
@@ -858,24 +888,23 @@ public class VisaoPousada extends JFrame implements ActionListener {
         gc.gridy = 4;
 
         p6.add(new javax.swing.JSeparator(), gc);
-        
-        
+
         gc.gridx = 0;
         gc.gridy = 5;
         p6.add(new JLabel("Valor total a pagar"), gc);
-        
+
         gc.gridx = 0;
         gc.gridy = 6;
         p6.add(valorDiarias, gc);
-        
+
         gc.gridx = 0;
-        gc.gridy =7;
+        gc.gridy = 7;
         p6.add(new JLabel("Porcentagem de desconto"), gc);
-        
+
         gc.gridx = 0;
         gc.gridy = 8;
-        p6.add( jSDesconto , gc);
-        
+        p6.add(jSDesconto, gc);
+
         gc.gridx = 0;
         gc.gridy = 9;
         p6.add(ReservarQt, gc);
@@ -898,7 +927,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         modeloVRes = new nonEditableJTable();
         JScrollPane barraRolagem; // ScrollBar para panelControle
         bExcluirReserva = new JButton("Excluir Reserva");
-         
+
         modeloVRes = new nonEditableJTable();
         jTabelaReserva = new JTable(modeloVRes);
 
@@ -915,27 +944,22 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
 
-            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(),controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()),controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()),controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
+            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
             modeloVRes.addRow(dados);
         }
-        
-        
+
         bExcluirReserva.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
-                int comfirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja deletar a reserva?");
-                 if(comfirmacao==0){
-                     modeloVRes.removeRow(jTabelaReserva.getSelectedRow());
-                     controle.RemoverReserva(Integer.parseInt(numeroReserva));
-                 }
-               
-                 
+                int comfirmacao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar a reserva?");
+                if (comfirmacao == 0) {
+                    modeloVRes.removeRow(jTabelaReserva.getSelectedRow());
+                    controle.RemoverReserva(Integer.parseInt(numeroReserva));
+                }
+
             }
         });
-       
-        
-        
-        
+
         jTabelaReserva.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
         barraRolagem = new JScrollPane(jTabelaReserva);
 
@@ -947,7 +971,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p1.add(panelLista);
 
         p1.add(BorderLayout.CENTER, panelLista);
-        p2.add(BorderLayout.SOUTH, bEditarReserva);
+
         p2.add(BorderLayout.SOUTH, bExcluirReserva);
         p1.add(BorderLayout.SOUTH, p2);
 
@@ -1079,7 +1103,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
         } else if (e.getSource() == bModificarQuarto) {
 
             this.controle.AlterarQuarto(Double.parseDouble(precoEditQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoEditQuarto.getText());
-            //numeroQuarto = new JTextField(5);
             precoEditQuarto = new JTextField(10);
             descricaoEditQuarto = new JTextField(25);
             atualizaInterface();
@@ -1111,13 +1134,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "VisualizarCliente");
-        } else if (e.getSource() == bEditarReserva) {
-
         } else if (e.getSource() == jMenuPagamento) {
-            
+
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "RealizarPagamento");
-        } 
+        }
     }
 }

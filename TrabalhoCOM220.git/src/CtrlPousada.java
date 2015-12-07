@@ -189,6 +189,24 @@ public class CtrlPousada {
         return total;
     }
     
+    public void realizaPagamento(int nroReserva,double pagamento){
+        double falta;
+        for (int i = 0; i < this.Reservas.size(); i++) {
+            if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
+                if(pagamento>(this.Reservas.get(i).getPgtReserva().getValorTotal()-this.Reservas.get(i).getPgtReserva().getValorPg())){
+                    falta = (this.Reservas.get(i).getPgtReserva().getValorTotal()-this.Reservas.get(i).getPgtReserva().getValorPg());
+                    this.Reservas.get(i).getPgtReserva().setValorPg(falta);
+                    this.Reservas.get(i).getDiarias().setValorPg(pagamento - falta + this.Reservas.get(i).getDiarias().getValorPg());
+
+                
+                }else{
+                    this.Reservas.get(i).getPgtReserva().setValorPg(pagamento);
+                }
+            }
+        }
+        
+        
+    }
     public ArrayList<Quarto> QuartoDisponiveis(Date Entrada, Date saida) {
 
         ArrayList<Quarto> disponiveis = new ArrayList<>(Quartos);

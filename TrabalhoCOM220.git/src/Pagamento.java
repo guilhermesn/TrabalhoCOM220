@@ -15,9 +15,7 @@ public class Pagamento {
 
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
-        if(valorTotal == valorPg){
-            situacao = true;
-        }
+        
     }
 
     public double getValorPg() {
@@ -25,6 +23,9 @@ public class Pagamento {
     }
 
     public void setValorPg(double valorPg) {
+        if(valorTotal-valorPg >= valorPg){
+            situacao = true;
+        }
         this.valorPg = valorPg;
     }
 
