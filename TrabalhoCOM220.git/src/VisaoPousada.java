@@ -67,6 +67,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JButton bModificarQuarto;
     private JButton bPesquisarQuartoDisponiveis;
     private JButton bReservarQuartoDisponiveis;
+    private JButton bEditarReserva;
+    private JButton bExcluirReserva;
 
     private JPanel janelaPrincipal;
     private JComboBox jCBCliente = new javax.swing.JComboBox();
@@ -182,6 +184,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bModificarQuarto = new JButton("Modificar");
         bPesquisarQuartoDisponiveis = new JButton("Pesquisar");
         bReservarQuartoDisponiveis = new JButton("Reservar");
+        bEditarReserva = new JButton("Editar Reserva");
+        bExcluirReserva = new JButton("Excluir Reserva");
 
         bCadastrarQuarto.addActionListener(this);
         bVoltarCliente.addActionListener(this);
@@ -196,6 +200,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bModificarQuarto.addActionListener(this);
         bPesquisarQuartoDisponiveis.addActionListener(this);
         bReservarQuartoDisponiveis.addActionListener(this);
+        bEditarReserva.addActionListener(this);
+        bExcluirReserva.addActionListener(this);
 
         cpfCliente = new JTextField(11);
         nomeCliente = new JTextField(15);
@@ -744,8 +750,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p1.add(panelLista);
 
         p1.add(BorderLayout.CENTER, panelLista);
-        p2.add(BorderLayout.SOUTH, bEditarQuarto);
-        p2.add(BorderLayout.SOUTH, bExcluirQuarto);
+        p2.add(BorderLayout.SOUTH, bEditarReserva);
+        p2.add(BorderLayout.SOUTH, bExcluirReserva);
         p1.add(BorderLayout.SOUTH, p2);
 
         return p1;
@@ -914,6 +920,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "VisualizarCliente");
+        } else if (e.getSource() == bEditarReserva) {
+
+        } else if (e.getSource() == bExcluirReserva) {
+
         }
     }
 }
