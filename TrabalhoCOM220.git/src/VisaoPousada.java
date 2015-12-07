@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -85,10 +87,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaCliente;
     private JTable jTabelaQuartoDisp;
     private JTable jTabelaQuartoDispRes;
-     private JTable jTabelaQuartoARes;
-
+    private JTable jTabelaQuartoARes;
+     private JTable jTabelaReserva;
+    
     private DefaultTableModel modelo = new nonEditableJTable();
-    private DateFormat df = new SimpleDateFormat("dd/mm/yyyy");
+    private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private DefaultTableModel modelo2 = new nonEditableJTable();
     private DefaultTableModel modelo1 = new nonEditableJTable();
 
@@ -218,7 +221,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         getContentPane().add(janelaPrincipal);
 
-        setSize(950, 500);
+        setSize(1130, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Pousada");
 
@@ -533,17 +536,25 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public JPanel gerarPReservarQuarto() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p6 = new JPanel(grid);
 
         JPanel panelLista1 = new JPanel();
         JPanel panelLista2 = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
         JPanel p3 = new JPanel(new FlowLayout());
-        
+
         JPanel p4 = new JPanel(new BorderLayout());
         JPanel p5 = new JPanel(new BorderLayout());
-        JPanel p6 = new JPanel(new FlowLayout());
-        
+        //JPanel p6 = new JPanel(new FlowLayout());
+
         JScrollPane barraRolagem1; // ScrollBar para panelControle
         JScrollPane barraRolagem2;
 
@@ -561,34 +572,64 @@ public class VisaoPousada extends JFrame implements ActionListener {
         modelo1.addColumn("Número");
         modelo1.addColumn("Descrição");
         modelo1.addColumn("Preço");
-        
-        JButton button1 = new JButton("Reservar -->>");
-	JButton button2 = new JButton("<<-- Remover");	
-        button1.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-                                    Object[] dados = {jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 0).toString(), jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 1).toString(), jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 2).toString()};
-                                    modelo1.addRow(dados);
-                                    modelo2.removeRow(jTabelaQuartoDispRes.getSelectedRow());
-                                    jTabelaQuartoDispRes.getSelectionModel().setSelectionInterval(0, 0);
-			}
-		});
-        
-        button2.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Object[] dados = {jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 0).toString(), jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 1).toString(), jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 2).toString()};
-                                    modelo2.addRow(dados);
-                                    modelo1.removeRow(jTabelaQuartoARes.getSelectedRow());
-                                    jTabelaQuartoARes.getSelectionModel().setSelectionInterval(0, 0);
-			}
-		});
-        for (int i = 0; i < this.controle.ListarQuartos().size(); i++) {
-            int numero = this.controle.ListarQuartos().get(i).getNumero();
-            String descricao = this.controle.ListarQuartos().get(i).getDescricao();
-            double preco = this.controle.ListarQuartos().get(i).getPreco();
 
-            Object[] dados = {numero, descricao, preco};
-            modelo2.addRow(dados);
-        }
+        JButton BtBuscar = new JButton("Buscar");
+        JButton AddReserva = new JButton("Reservar -->>");
+        JButton RemoveReserva = new JButton("<<-- Remover");
+        JButton ReservarQt = new JButton("Finalizar reserva");
+
+        ReservarQt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateini;
+                Date datefim;
+                try {
+                    dateini = formatter.parse( "11/02/2015");//  dataInicial.getText());
+                    datefim = formatter.parse( "11/02/2015");//dataFinal.getText());
+                    Vector vectorQuartos = new Vector();
+                    vectorQuartos.add(10);
+                    vectorQuartos.add(11);
+                    vectorQuartos.add(12);
+                     controle.CadastrarReserva(dateini,datefim,50.50,new Pagamento(50),new Pagamento(50),"asdads",vectorQuartos);
+                
+                } catch (ParseException ex) {
+                    Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+               
+            }
+        });
+
+        BtBuscar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < controle.ListarQuartos().size(); i++) {
+                    int numero = controle.ListarQuartos().get(i).getNumero();
+                    String descricao = controle.ListarQuartos().get(i).getDescricao();
+                    double preco = controle.ListarQuartos().get(i).getPreco();
+
+                    Object[] dados = {numero, descricao, preco};
+                    modelo2.addRow(dados);
+                }
+            }
+        });
+
+        AddReserva.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Object[] dados = {jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 0).toString(), jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 1).toString(), jTabelaQuartoDispRes.getValueAt(jTabelaQuartoDispRes.getSelectedRow(), 2).toString()};
+                modelo1.addRow(dados);
+                modelo2.removeRow(jTabelaQuartoDispRes.getSelectedRow());
+                jTabelaQuartoDispRes.getSelectionModel().setSelectionInterval(0, 0);
+            }
+        });
+
+        RemoveReserva.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Object[] dados = {jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 0).toString(), jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 1).toString(), jTabelaQuartoARes.getValueAt(jTabelaQuartoARes.getSelectedRow(), 2).toString()};
+                modelo2.addRow(dados);
+                modelo1.removeRow(jTabelaQuartoARes.getSelectedRow());
+                jTabelaQuartoARes.getSelectionModel().setSelectionInterval(0, 0);
+            }
+        });
 
         for (int i = 0; i < this.controle.ListaClientes().size(); i++) {
             //Object[] dados = {this.controle.ListaClientes().get(i).getNome(), this.controle.ListaClientes().get(i).getCPF(), this.controle.ListaClientes().get(i).getTelefone(), this.controle.ListaClientes().get(i).getEndereco()};
@@ -617,17 +658,36 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p2.add(dataInicial);
         p2.add(new JLabel("    Data Final:"));
         p2.add(dataFinal);
+        p2.add(BtBuscar);
         p2.add(new JLabel("    Cliente:"));
         p2.add(jCBCliente);
+
+        p4.add(new JLabel("      Quartos livres:"), BorderLayout.NORTH);
+        p4.add(panelLista1, BorderLayout.CENTER);
+
+        p5.add(new JLabel("      Quartos a serem rezervados:"), BorderLayout.NORTH);
+        p5.add(panelLista2, BorderLayout.CENTER);
+              
+        gc.gridx = 0;
+        gc.gridy = 2;
+
+        p6.add(AddReserva, gc);
         
-        p4.add(new JLabel("      Quartos livres:"),BorderLayout.NORTH);
-        p4.add(panelLista1,BorderLayout.CENTER);
+        gc.gridx = 0;
+        gc.gridy = 3;
+        p6.add(RemoveReserva, gc);
         
-        p5.add(new JLabel("      Quartos a serem rezervados:"),BorderLayout.NORTH);
-        p5.add(panelLista2,BorderLayout.CENTER);
+        gc.gridx = 0;
+        gc.gridy = 4;
+
+        p6.add(new javax.swing.JSeparator(),gc);
         
-        p6.add(button1);
-        p6.add(button2);
+       
+        
+        gc.gridx = 0;
+        gc.gridy = 6;
+        p6.add(ReservarQt, gc);
+        
         try {
             MaskFormatter dateMask = new MaskFormatter("##/##/####");
             dateMask.install(dataInicial);
@@ -638,7 +698,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         panelLista1.add(barraRolagem1, BorderLayout.CENTER);
         panelLista2.add(barraRolagem2, BorderLayout.CENTER);
-        
+
         p1.add(BorderLayout.CENTER, p6);
         p1.add(BorderLayout.EAST, p5);
         p1.add(BorderLayout.WEST, p4);
@@ -648,38 +708,46 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public JPanel gerarPVisualizarReserva() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
+        JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
 
-        JPanel p1 = new JPanel(grid);
+        JScrollPane barraRolagem; // ScrollBar para panelControle
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("Data de entrada:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 0;
-        p1.add(numeroQuarto = new JTextField(5), gc);
+        modelo = new nonEditableJTable();
+        jTabelaReserva = new JTable(modelo);
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-        p1.add(new JLabel("Data de Saida:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 1;
-        p1.add(precoQuarto = new JTextField(10), gc);
+        // Colunas da lista de Clientes
+        modelo.addColumn("Numero");
+        modelo.addColumn("Entrada");
+        modelo.addColumn("Saida");
+        modelo.addColumn("Cliente");
+        modelo.addColumn("Quartos");
+        modelo.addColumn("Valor Pago");
+        modelo.addColumn("Valor Restante");
+        modelo.addColumn("Desconto");
+        modelo.addColumn("Estado");
+        
+        for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
+           
+            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(),controle.ListarReservas().get(i).getCpf(),controle.ListarReservas().get(i).getQuartos()};
+            modelo.addRow(dados);
+        }
 
-        gc.gridx = 0;
-        gc.gridy = 2;
-        p1.add(new JLabel("Quarto:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 2;
-        p1.add(descricaoQuarto = new JTextField(25), gc);
+        jTabelaReserva.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
+        barraRolagem = new JScrollPane(jTabelaReserva);
 
-        gc.gridx = 1;
-        gc.gridy = 3;
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+
+        panelLista.add(barraRolagem, BorderLayout.CENTER);
+
+        p1.add(panelLista);
+
+        p1.add(BorderLayout.CENTER, panelLista);
+        p2.add(BorderLayout.SOUTH, bEditarQuarto);
+        p2.add(BorderLayout.SOUTH, bExcluirQuarto);
+        p1.add(BorderLayout.SOUTH, p2);
 
         return p1;
     }

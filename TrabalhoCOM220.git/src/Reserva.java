@@ -14,7 +14,7 @@ public class Reserva implements Serializable{
     private Pagamento pgtReserva;
     private String Cpf;
 
-    public Reserva(int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf) {
+    public Reserva(int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf,Vector vectorQuartos) {
         this.numeroReserva = numeroReserva;
         this.entrada = entrada;
         this.saida = saida;
@@ -22,6 +22,7 @@ public class Reserva implements Serializable{
         this.diarias = diarias;
         this.pgtReserva = pgtReserva;
         this.Cpf = Cpf;
+        this.quartos = vectorQuartos;
     }
 
     public int getNumeroReserva() {

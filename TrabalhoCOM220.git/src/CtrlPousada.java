@@ -44,8 +44,15 @@ public class CtrlPousada {
         Clientes.add(cl);
     }
 
-    public void CadastrarReserva(int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf) {
-        Reserva rs = new Reserva(numeroReserva, entrada, saida, desconto, diarias, pgtReserva, Cpf);
+   
+    
+    public void CadastrarReserva(Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf, Vector vectorQuartos) {
+        int numeroReserva = 1;
+        if(Reservas.size()>0){
+            numeroReserva = Reservas.get(Reservas.size()-1).getNumeroReserva();
+            numeroReserva++;
+        }
+        Reserva rs = new Reserva(numeroReserva, entrada, saida, desconto, diarias, pgtReserva, Cpf,vectorQuartos);
         Reservas.add(rs);
 
     }
@@ -292,4 +299,6 @@ public class CtrlPousada {
              ioe.printStackTrace();
           }
     }
+
+    
 }
