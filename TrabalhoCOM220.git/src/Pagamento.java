@@ -1,29 +1,36 @@
 
 
 public class Pagamento {
-    private double valor;
-    private Boolean situacao;
+    private double valorTotal;
+    private double valorPg;
+    private Boolean situacao = false;
 
     public Pagamento(double valor) {
-        this.valor = valor;
+        this.valorTotal = valor;
     }
 
-    public double getValor() {
-        return valor;
+    public double getValorTotal() {
+        return valorTotal;
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+        if(valorTotal == valorPg){
+            situacao = true;
+        }
+    }
+
+    public double getValorPg() {
+        return valorPg;
+    }
+
+    public void setValorPg(double valorPg) {
+        this.valorPg = valorPg;
     }
 
     public Boolean getSituacao() {
         return situacao;
     }
 
-    public void setSituacao(Boolean situacao) {
-        this.situacao = situacao;
-    }
-    
-    
     
 }

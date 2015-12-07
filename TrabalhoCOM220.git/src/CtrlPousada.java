@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
@@ -44,12 +46,16 @@ public class CtrlPousada {
         Clientes.add(cl);
     }
 
-    public void CadastrarReserva(Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf, ArrayList<Quarto> vectorQuartos) {
+    public void CadastrarReserva(Date entrada, Date saida, double desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
         int numeroReserva = 1;
         if (Reservas.size() > 0) {
             numeroReserva = Reservas.get(Reservas.size() - 1).getNumeroReserva();
             numeroReserva++;
         }
+        
+        Pagamento diarias = new Pagamento(this.TotalDiarias(entrada, saida, vectorQuartos));
+        Pagamento pgtReserva= new Pagamento(TotalDiarias(vectorQuartos));
+        
         Reserva rs = new Reserva(numeroReserva, entrada, saida, desconto, diarias, pgtReserva, Cpf, vectorQuartos);
         Reservas.add(rs);
 
@@ -147,29 +153,76 @@ public class CtrlPousada {
         return null;
     }
 
-    public double CalculaDesconto(int nroReserva, int desconto) {
+    public double CalculaDesconto(int nroReserva) {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValor() + Reservas.get(i).getPgtReserva().getValor()) * (desconto / 100);
+                total = (Reservas.get(i).getDiarias().getValorTotal()+ Reservas.get(i).getPgtReserva().getValorTotal()) * (Reservas.get(i).getDesconto() / 100);
                 return total;
             }
         }
 
         return total;
     }
+    
+    public double CalculaValPG(int nroReserva) {
+        double total = 0;
+        for (int i = 0; i < this.Reservas.size(); i++) {
+            if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
+                total = (Reservas.get(i).getDiarias().getValorPg()+ Reservas.get(i).getPgtReserva().getValorPg());
+                return total;
+            }
+        }
 
+        return total;
+    }
+    
+    public double CalculaValAPG(int nroReserva) {
+        double total = 0;
+        for (int i = 0; i < this.Reservas.size(); i++) {
+            if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
+                total = (Reservas.get(i).getDiarias().getValorTotal())-CalculaValPG(nroReserva)-CalculaDesconto(nroReserva);
+                return total;
+            }
+        }
+
+        return total;
+    }
+    
     public ArrayList<Quarto> QuartoDisponiveis(Date Entrada, Date saida) {
 
         ArrayList<Quarto> disponiveis = new ArrayList<>(Quartos);
         for (int i = 0; i < this.Reservas.size(); i++) {
-            if(!((Entrada.after(this.Reservas.get(i).getSaida())) ||  (saida.before(this.Reservas.get(i).getEntrada())))){
+            if (!((Entrada.after(this.Reservas.get(i).getSaida())) || (saida.before(this.Reservas.get(i).getEntrada())))) {
                 for (int j = 0; j < this.Reservas.get(i).getQuartos().size(); j++) {
                     disponiveis.remove(this.Reservas.get(i).getQuartos().get(j));
                 }
             }
         }
         return disponiveis;
+    }
+
+    public double TotalDiarias(Date entrada, Date saida, ArrayList<Quarto> vectorQuartos) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar data1 = Calendar.getInstance();
+        Calendar data2 = Calendar.getInstance();
+        data1.setTime(entrada);
+        data2.setTime(saida);
+        double total = 0;
+        int totalDias = data2.get(Calendar.DAY_OF_YEAR)
+                - data1.get(Calendar.DAY_OF_YEAR);
+        for (int i = 0; i < vectorQuartos.size(); i++) {
+            total += totalDias * vectorQuartos.get(i).getPreco();
+        }
+        return total;
+    }
+    
+    public double TotalDiarias(ArrayList<Quarto> vectorQuartos) {
+        double total = 0;
+        for (int i = 0; i < vectorQuartos.size(); i++) {
+            total += vectorQuartos.get(i).getPreco();
+        }
+        return total;
     }
 
     public ArrayList<Reserva> ListarReservas() {
