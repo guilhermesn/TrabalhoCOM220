@@ -102,6 +102,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaReserva;
 
     private DefaultTableModel modeloVRes = new nonEditableJTable();
+    private DefaultTableModel modeloQuartos = new nonEditableJTable();
     private DefaultTableModel modelo = new nonEditableJTable();
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private DefaultTableModel modelo2 = new nonEditableJTable();
@@ -190,7 +191,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bExcluirCliente = new JButton("Excluir Cliente");
         bCadastrarReserva = new JButton("Cadastrar");
         bEditarQuarto = new JButton("Editar Quarto");
-        bExcluirQuarto = new JButton("Excluir Quarto");
         bVoltarQuarto = new JButton("Voltar");
         bModificarQuarto = new JButton("Modificar");
 
@@ -205,7 +205,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bExcluirCliente.addActionListener(this);
         bCadastrarReserva.addActionListener(this);
         bEditarQuarto.addActionListener(this);
-        bExcluirQuarto.addActionListener(this);
         bVoltarQuarto.addActionListener(this);
         bModificarQuarto.addActionListener(this);
 
@@ -406,20 +405,20 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public JPanel gerarPConsultaQuarto() {
-
+        bExcluirQuarto = new JButton("Excluir Quarto");
         JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
 
         JScrollPane barraRolagem; // ScrollBar para panelControle
 
-        modelo = new nonEditableJTable();
-        jTabelaQuarto = new JTable(modelo);
+        modeloQuartos = new nonEditableJTable();
+        jTabelaQuarto = new JTable(modeloQuartos);
 
         // Colunas da lista de Clientes
-        modelo.addColumn("Número");
-        modelo.addColumn("Descrição");
-        modelo.addColumn("Preço");
+        modeloQuartos.addColumn("Número");
+        modeloQuartos.addColumn("Descrição");
+        modeloQuartos.addColumn("Preço");
 
         for (int i = 0; i < this.controle.ListarQuartos().size(); i++) {
             int numero = this.controle.ListarQuartos().get(i).getNumero();
@@ -427,7 +426,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
             double preco = this.controle.ListarQuartos().get(i).getPreco();
 
             Object[] dados = {numero, descricao, preco};
-            modelo.addRow(dados);
+            modeloQuartos.addRow(dados);
         }
 
         jTabelaQuarto.getSelectionModel().setSelectionInterval(0, 0); //Inicia a tabela com a primeira linha selecionada
@@ -439,7 +438,17 @@ public class VisaoPousada extends JFrame implements ActionListener {
         panelLista.add(barraRolagem, BorderLayout.CENTER);
 
         p1.add(panelLista);
-
+        bExcluirQuarto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int comfirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja excluir o quarto?");
+                 if(comfirmacao==0){
+                      controle.RemoverQuarto(Integer.parseInt(jTabelaQuarto.getValueAt(jTabelaQuarto.getSelectedRow(), 0).toString()));
+                      modeloQuartos.removeRow(jTabelaQuarto.getSelectedRow());
+                 }
+               
+                 
+            }
+        });
         p1.add(BorderLayout.CENTER, panelLista);
         p2.add(BorderLayout.SOUTH, bEditarQuarto);
         p2.add(BorderLayout.SOUTH, bExcluirQuarto);
@@ -1047,10 +1056,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
             layout.show(cards, "CadastrarCliente");
         } else if (e.getSource() == bModificarQuarto) {
 
-            this.controle.AlterarQuarto(Double.parseDouble(precoQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoQuarto.getText());
-            numeroQuarto = new JTextField(5);
-            precoQuarto = new JTextField(10);
-            descricaoQuarto = new JTextField(25);
+            this.controle.AlterarQuarto(Double.parseDouble(precoEditQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoEditQuarto.getText());
+            //numeroQuarto = new JTextField(5);
+            precoEditQuarto = new JTextField(10);
+            descricaoEditQuarto = new JTextField(25);
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "VisualizarQuarto");
@@ -1062,12 +1071,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "CadastrarQuarto");
-        } else if (e.getSource() == bExcluirQuarto) {
-
-            this.controle.RemoverQuarto(Integer.parseInt(jTabelaQuarto.getValueAt(jTabelaQuarto.getSelectedRow(), 0).toString()));
-            atualizaInterface();
-            layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "VisualizarQuarto");
         } else if (e.getSource() == bExcluirCliente) {
 
             this.controle.RemoverCliente(jTabelaCliente.getValueAt(jTabelaCliente.getSelectedRow(), 1).toString());
