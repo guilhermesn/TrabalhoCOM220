@@ -22,28 +22,19 @@ public class CtrlPousada {
         this.view = new VisaoPousada(this);
         view.gerarInterface();
 
-        Quarto qt = new Quarto(28, 1, "Muito bonito");
-
-        Quartos.add(qt);
-        qt = new Quarto(299, 2, "Muito nossa");
-        Quartos.add(qt);
-        qt = new Quarto(29, 3, "Muito feio");
-        Quartos.add(qt);
-        qt = new Quarto(26, 4, "Muito fumante");
-        Quartos.add(qt);
-
-        Cliente ct = new Cliente("23432", "Chupita", "Rua do fror", "91195472");
-        Clientes.add(ct);
-        ct = new Cliente("33355", "Markito", "Rua Nois vai", "35914445");
-        Clientes.add(ct);
-        ct = new Cliente("5888", "Iza folgada", "Rua Nois vei", "36225588");
-        Clientes.add(ct);
+        try {
+            desserializaCliente();
+            desserializaQuarto();
+            desserializaReserva();
+        } catch (Exception e) {
+        }       
 
     }
 
     public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {
         Cliente cl = new Cliente(CPF, nome, endereco, telefone);
         Clientes.add(cl);
+        arquiva();
     }
 
     public void CadastrarReserva(Date entrada, Date saida, int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
@@ -52,18 +43,20 @@ public class CtrlPousada {
             numeroReserva = Reservas.get(Reservas.size() - 1).getNumeroReserva();
             numeroReserva++;
         }
-        
+
         Pagamento diarias = new Pagamento(this.TotalDiarias(entrada, saida, vectorQuartos));
-        Pagamento pgtReserva= new Pagamento(TotalDiarias(vectorQuartos));
-        
+        Pagamento pgtReserva = new Pagamento(TotalDiarias(vectorQuartos));
+
         Reserva rs = new Reserva(numeroReserva, entrada, saida, desconto, diarias, pgtReserva, Cpf, vectorQuartos);
         Reservas.add(rs);
+        arquiva();
 
     }
 
     public void CadastraQuarto(double preco, int numero, String descricao) {
         Quarto qt = new Quarto(preco, numero, descricao);
         this.Quartos.add(qt);
+        arquiva();
     }
 
     public void AlterarQuarto(double preco, int numero, String descricao) {
@@ -74,6 +67,7 @@ public class CtrlPousada {
                 break;
             }
         }
+        arquiva();
     }
 
     public void AlterarCliente(String CPF, String nome, String endereco, String telefone) {
@@ -85,6 +79,7 @@ public class CtrlPousada {
                 break;
             }
         }
+        arquiva();
     }
 
     public void AlterarReserva(int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf) {
@@ -95,6 +90,7 @@ public class CtrlPousada {
                 break;
             }
         }
+        arquiva();
     }
 
     public void RemoverReserva(int numeroReserva) {
@@ -104,6 +100,7 @@ public class CtrlPousada {
                 break;
             }
         }
+        arquiva();
     }
 
     public void RemoverQuarto(int nro) {
@@ -113,7 +110,7 @@ public class CtrlPousada {
                 break;
             }
         }
-
+        arquiva();
     }
 
     public void RemoverCliente(String CPF) {
@@ -123,7 +120,7 @@ public class CtrlPousada {
                 break;
             }
         }
-
+        arquiva();
     }
 
     public Quarto getQuarto(int nro) {
@@ -157,38 +154,38 @@ public class CtrlPousada {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValorTotal())* (((double)(Reservas.get(i).getDesconto())) / 100);
+                total = (Reservas.get(i).getDiarias().getValorTotal()) * (((double) (Reservas.get(i).getDesconto())) / 100);
                 return total;
             }
         }
 
         return total;
     }
-    
+
     public double CalculaValPG(int nroReserva) {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValorPg()+ Reservas.get(i).getPgtReserva().getValorPg());
+                total = (Reservas.get(i).getDiarias().getValorPg() + Reservas.get(i).getPgtReserva().getValorPg());
                 return total;
             }
         }
 
         return total;
     }
-    
+
     public double CalculaValAPG(int nroReserva) {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValorTotal())-CalculaValPG(nroReserva)-CalculaDesconto(nroReserva);
+                total = (Reservas.get(i).getDiarias().getValorTotal()) - CalculaValPG(nroReserva) - CalculaDesconto(nroReserva);
                 return total;
             }
         }
 
         return total;
     }
-    
+
     public ArrayList<Quarto> QuartoDisponiveis(Date Entrada, Date saida) {
 
         ArrayList<Quarto> disponiveis = new ArrayList<>(Quartos);
@@ -216,7 +213,7 @@ public class CtrlPousada {
         }
         return total;
     }
-    
+
     public double TotalDiarias(ArrayList<Quarto> vectorQuartos) {
         double total = 0;
         for (int i = 0; i < vectorQuartos.size(); i++) {
@@ -318,6 +315,15 @@ public class CtrlPousada {
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        }
+    }
+
+    private void arquiva() {
+        try {
+            serializaCliente();
+            serializaQuarto();
+            serializaReserva();
+        } catch (Exception e) {
         }
     }
 
