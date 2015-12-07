@@ -38,8 +38,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private CtrlPousada controle;
     private JTextField precoQuarto = new JTextField();
     private JTextField descricaoQuarto = new JTextField();
+    private JTextField descricaoEditQuarto= new JTextField(25);
     private JTextField numeroQuarto = new JTextField();
-
+    private JTextField precoEditQuarto = new JTextField(10);
+        
     private JTextField cpfCliente = new JTextField();
     private JTextField nomeCliente = new JTextField();
     private JTextField enderecoCliente = new JTextField();
@@ -652,8 +654,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         dataInicial = new JFormattedTextField(df);
         dataFinal = new JFormattedTextField(df);
-        dataInicial.setColumns(10);
-        dataFinal.setColumns(10);
+        
         p2.add(new JLabel("Data inicial:"));
         p2.add(dataInicial);
         p2.add(new JLabel("    Data Final:"));
@@ -774,10 +775,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
         gc.gridy = 1;
         if (NEditQuarto != null) {
             this.controle.getQuarto(Integer.parseInt(NEditQuarto)).getPreco();
-            precoQuarto.setText("" + this.controle.getQuarto(Integer.parseInt(NEditQuarto)).getPreco());
+            precoEditQuarto.setText("" + this.controle.getQuarto(Integer.parseInt(NEditQuarto)).getPreco());
         }
 
-        p1.add(precoQuarto, gc);
+        p1.add(precoEditQuarto, gc);
 
         gc.gridx = 0;
         gc.gridy = 2;
@@ -785,9 +786,9 @@ public class VisaoPousada extends JFrame implements ActionListener {
         gc.gridx = 1;
         gc.gridy = 2;
         if (NEditQuarto != null) {
-            descricaoQuarto.setText(this.controle.getQuarto(Integer.parseInt(NEditQuarto)).getDescricao());
+            descricaoEditQuarto.setText(this.controle.getQuarto(Integer.parseInt(NEditQuarto)).getDescricao());
         }
-        p1.add(descricaoQuarto, gc);
+        p1.add(descricaoEditQuarto, gc);
 
         gc.gridx = 1;
         gc.gridy = 3;
