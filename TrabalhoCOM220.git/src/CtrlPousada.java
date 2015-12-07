@@ -46,7 +46,7 @@ public class CtrlPousada {
         Clientes.add(cl);
     }
 
-    public void CadastrarReserva(Date entrada, Date saida, double desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
+    public void CadastrarReserva(Date entrada, Date saida, int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
         int numeroReserva = 1;
         if (Reservas.size() > 0) {
             numeroReserva = Reservas.get(Reservas.size() - 1).getNumeroReserva();
@@ -157,7 +157,7 @@ public class CtrlPousada {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValorTotal()+ Reservas.get(i).getPgtReserva().getValorTotal()) * (Reservas.get(i).getDesconto() / 100);
+                total = (Reservas.get(i).getDiarias().getValorTotal())* (((double)(Reservas.get(i).getDesconto())) / 100);
                 return total;
             }
         }

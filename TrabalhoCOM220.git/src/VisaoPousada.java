@@ -87,6 +87,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private javax.swing.JMenuItem jMenuConsultaQuartoDisponivel;
     private javax.swing.JMenuItem jMenuConsultaCliente;
     private javax.swing.JMenuItem jMenuConsultaReserva;
+    private javax.swing.JMenuItem jMenuPagamento;
     private javax.swing.JMenu jCadastrar;
     private javax.swing.JMenu jVisualisar;
     private javax.swing.JMenu jRelatorio;
@@ -129,6 +130,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         cards.add("VisualizarQuartoDisponivel", gerarPQuartoDisponivel());
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         cards.add("EditarQuarto", gerarPEditarQuarto());
+        cards.add("RealizarPagamento", gerarPRealizarPagamento());
 
     }
 
@@ -145,7 +147,9 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuConsultaQuartoDisponivel = new javax.swing.JMenuItem();
         jMenuConsultaCliente = new javax.swing.JMenuItem();
         jMenuConsultaReserva = new javax.swing.JMenuItem();
-
+        jMenuPagamento = new javax.swing.JMenuItem();
+                
+                
         jCadastrar.setText("Cadastrar");
         jMenuBar1.add(jCadastrar);
 
@@ -178,11 +182,15 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuConsultaCliente.setText("Clientes");
         jMenuConsultaCliente.addActionListener(this);
         jVisualisar.add(jMenuConsultaCliente);
-
+        
+        
         jMenuConsultaReserva.setText("Reservas");
         jMenuConsultaReserva.addActionListener(this);
+        jMenuPagamento.setText("Pagamentos");
+        jMenuPagamento.addActionListener(this);
         jVisualisar.add(jMenuConsultaReserva);
-
+        jCadastrar.add(jMenuPagamento);
+        
         bCadastrarQuarto = new JButton("Cadastrar");
         bVoltarCliente = new JButton("Voltar");
         bCadastrarCliente = new JButton("Cadastrar");
@@ -289,7 +297,21 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p1.add(bCadastrarCliente, gc);
         return p1;
     }
+    
+    public JPanel gerarPRealizarPagamento() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
 
+        JPanel p1 = new JPanel(grid);
+
+        return p1;
+    }
+
+    
     public JPanel gerarPEditarCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -674,7 +696,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
                     }
 
-                    controle.CadastrarReserva(dateini, datefim, Integer.parseInt(jSDesconto.getValue().toString()), controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
+                    controle.CadastrarReserva(dateini, datefim, (int)jSDesconto.getValue(), controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
                     for (int i = modelo1.getRowCount(); i > 0; i--) {
                         modelo1.removeRow(0);
                     }
@@ -1023,7 +1045,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
             layout.show(cards, "VisualizarQuartoDisponivel");
 
         } else if (e.getSource() == bCadastrarQuarto) {
-            //this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
+            this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
             numeroQuarto = new JTextField(5);
             precoQuarto = new JTextField(10);
             descricaoQuarto = new JTextField(25);
@@ -1091,6 +1113,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
             layout.show(cards, "VisualizarCliente");
         } else if (e.getSource() == bEditarReserva) {
 
+        } else if (e.getSource() == jMenuPagamento) {
+            
+            atualizaInterface();
+            layout = (CardLayout) cards.getLayout();
+            layout.show(cards, "RealizarPagamento");
         } 
     }
 }
