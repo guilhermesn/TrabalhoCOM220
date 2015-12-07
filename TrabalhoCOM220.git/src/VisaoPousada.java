@@ -88,8 +88,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaQuartoDisp;
     private JTable jTabelaQuartoDispRes;
     private JTable jTabelaQuartoARes;
-     private JTable jTabelaReserva;
-    
+    private JTable jTabelaReserva;
+
     private DefaultTableModel modelo = new nonEditableJTable();
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private DefaultTableModel modelo2 = new nonEditableJTable();
@@ -584,19 +584,19 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 Date dateini;
                 Date datefim;
                 try {
-                    dateini = formatter.parse( "11/02/2015");//  dataInicial.getText());
-                    datefim = formatter.parse( "11/02/2015");//dataFinal.getText());
+                    dateini = formatter.parse("11/02/2015");//  dataInicial.getText());
+                    datefim = formatter.parse("11/02/2015");//dataFinal.getText());
                     Vector vectorQuartos = new Vector();
-                    vectorQuartos.add(10);
-                    vectorQuartos.add(11);
-                    vectorQuartos.add(12);
-                     controle.CadastrarReserva(dateini,datefim,50.50,new Pagamento(50),new Pagamento(50),"asdads",vectorQuartos);
-                
+                    for (int i = 0; i < jTabelaQuartoARes.getRowCount(); i++) {
+                        vectorQuartos.add(jTabelaQuartoARes.getValueAt(i, 0));
+                    }
+
+                    controle.CadastrarReserva(dateini, datefim, 50.50, new Pagamento(50), new Pagamento(50), controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
+
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-               
+
             }
         });
 
@@ -667,27 +667,25 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         p5.add(new JLabel("      Quartos a serem rezervados:"), BorderLayout.NORTH);
         p5.add(panelLista2, BorderLayout.CENTER);
-              
+
         gc.gridx = 0;
         gc.gridy = 2;
 
         p6.add(AddReserva, gc);
-        
+
         gc.gridx = 0;
         gc.gridy = 3;
         p6.add(RemoveReserva, gc);
-        
+
         gc.gridx = 0;
         gc.gridy = 4;
 
-        p6.add(new javax.swing.JSeparator(),gc);
-        
-       
-        
+        p6.add(new javax.swing.JSeparator(), gc);
+
         gc.gridx = 0;
         gc.gridy = 6;
         p6.add(ReservarQt, gc);
-        
+
         try {
             MaskFormatter dateMask = new MaskFormatter("##/##/####");
             dateMask.install(dataInicial);
@@ -727,10 +725,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
         modelo.addColumn("Valor Restante");
         modelo.addColumn("Desconto");
         modelo.addColumn("Estado");
-        
+
         for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
-           
-            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(),controle.ListarReservas().get(i).getCpf(),controle.ListarReservas().get(i).getQuartos()};
+
+            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartos()};
             modelo.addRow(dados);
         }
 
