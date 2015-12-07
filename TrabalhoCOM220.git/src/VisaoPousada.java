@@ -101,6 +101,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaQuartoARes;
     private JTable jTabelaReserva;
 
+    private DefaultTableModel modeloVRes = new nonEditableJTable();
     private DefaultTableModel modelo = new nonEditableJTable();
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private DefaultTableModel modelo2 = new nonEditableJTable();
@@ -863,28 +864,28 @@ public class VisaoPousada extends JFrame implements ActionListener {
         JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
-
+        modeloVRes = new nonEditableJTable();
         JScrollPane barraRolagem; // ScrollBar para panelControle
         bExcluirReserva = new JButton("Excluir Reserva");
          
-        modelo = new nonEditableJTable();
-        jTabelaReserva = new JTable(modelo);
+        modeloVRes = new nonEditableJTable();
+        jTabelaReserva = new JTable(modeloVRes);
 
         // Colunas da lista de Clientes
-        modelo.addColumn("Numero");
-        modelo.addColumn("Entrada");
-        modelo.addColumn("Saida");
-        modelo.addColumn("Cliente");
-        modelo.addColumn("Quartos");
-        modelo.addColumn("Valor Pago");
-        modelo.addColumn("Valor Restante");
-        modelo.addColumn("Desconto");
-        modelo.addColumn("Estado");
+        modeloVRes.addColumn("Numero");
+        modeloVRes.addColumn("Entrada");
+        modeloVRes.addColumn("Saida");
+        modeloVRes.addColumn("Cliente");
+        modeloVRes.addColumn("Quartos");
+        modeloVRes.addColumn("Valor Pago");
+        modeloVRes.addColumn("Valor Restante");
+        modeloVRes.addColumn("Desconto");
+        modeloVRes.addColumn("Estado");
 
         for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
 
             Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(),controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()),controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()),controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
-            modelo.addRow(dados);
+            modeloVRes.addRow(dados);
         }
         
         
@@ -893,7 +894,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
                 int comfirmacao = JOptionPane.showConfirmDialog(null,"Tem certeza que deseja deletar a reserva?");
                  if(comfirmacao==0){
-                     modelo.removeRow(jTabelaReserva.getSelectedRow());
+                     modeloVRes.removeRow(jTabelaReserva.getSelectedRow());
+                     controle.RemoverReserva(Integer.parseInt(numeroReserva));
                  }
                
                  
