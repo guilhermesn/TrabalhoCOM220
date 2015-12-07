@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +18,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -117,9 +120,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public void atualizaInterface() {
+        
+        JTF_data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));        
 
-        JTF_data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
-
+        cards.add("Menu", gerarPMain());
         cards.add("CadastrarCliente", gerarPCadastraCliente());
         cards.add("EditarCliente", gerarPEditarCliente());
         cards.add("CadastrarQuarto", gerarPCadastraQuarto());
@@ -137,7 +141,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
     private void iniciaBotoes() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenuBar1 = new javax.swing.JMenuBar();        
         jCadastrar = new javax.swing.JMenu();
         jVisualisar = new javax.swing.JMenu();
         jRelatorio = new javax.swing.JMenu();
@@ -248,6 +252,17 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         setVisible(true);
     }
+    
+    public JPanel gerarPMain(){
+        Icon logo = new ImageIcon("logo.jpg");
+        JLabel imagem = new JLabel(logo);
+                
+        JPanel p = new JPanel();
+        p.setLayout(new GridLayout(1,1));
+        p.add(imagem);
+        
+        return p;
+    }
 
     public JPanel gerarPCadastraCliente() {
         GridBagLayout grid = new GridBagLayout();
@@ -350,6 +365,58 @@ public class VisaoPousada extends JFrame implements ActionListener {
         return p1;
     }
 
+    public JPanel gerarPEditarReserva() {
+        GridBagLayout grid = new GridBagLayout();
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.fill = GridBagConstraints.EAST;
+        gc.insets = new Insets(0, 3, 3, 0);
+        gc.gridwidth = 1;
+        gc.gridheight = 1;
+
+        JPanel p1 = new JPanel(grid);
+        gc.gridx = 0;
+        gc.gridy = 0;
+        p1.add(new JLabel("CPF:"), gc);
+
+        gc.gridx = 1;
+        gc.gridy = 0;
+        p1.add(new JLabel(NEditCPF), gc);
+
+        if (NEditCPF != null) {
+            EdtNomeCliente.setText(controle.getCliente(NEditCPF).getEndereco());
+            EdtEnderecoCliente.setText(controle.getCliente(NEditCPF).getEndereco());
+            EdtTelefoneCliente.setText(controle.getCliente(NEditCPF).getTelefone());
+        }
+
+        gc.gridx = 0;
+        gc.gridy = 1;
+        p1.add(new JLabel("Nome:"), gc);
+
+        gc.gridx = 1;
+        gc.gridy = 1;
+        p1.add(EdtNomeCliente, gc);
+
+        gc.gridx = 0;
+        gc.gridy = 2;
+        p1.add(new JLabel("Endereço:"), gc);
+        gc.gridx = 1;
+        gc.gridy = 2;
+        p1.add(EdtEnderecoCliente, gc);
+
+        gc.gridx = 0;
+        gc.gridy = 3;
+        p1.add(new JLabel("Telefone:"), gc);
+        gc.gridx = 1;
+        gc.gridy = 3;
+        p1.add(EdtTelefoneCliente, gc);
+
+        gc.gridx = 1;
+        gc.gridy = 4;
+        p1.add(bEditaCliente, gc);
+
+        return p1;
+    }
+    
     public JPanel gerarPEditarCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -1099,7 +1166,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "CadastrarCliente");
+            layout.show(cards, "CadastrarCliente");            
+        
         } else if (e.getSource() == bModificarQuarto) {
 
             this.controle.AlterarQuarto(Double.parseDouble(precoEditQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoEditQuarto.getText());
