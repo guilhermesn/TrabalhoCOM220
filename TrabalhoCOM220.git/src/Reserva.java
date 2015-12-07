@@ -1,5 +1,6 @@
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -9,12 +10,12 @@ public class Reserva implements Serializable{
     private Date entrada;
     private Date saida;
     private double desconto;
-    private Vector quartos = new Vector();
+    private ArrayList<Quarto> Quartos = new ArrayList<>();
     private Pagamento diarias;
     private Pagamento pgtReserva;
     private String Cpf;
 
-    public Reserva(int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf,Vector vectorQuartos) {
+    public Reserva(int numeroReserva, Date entrada, Date saida, double desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf,ArrayList<Quarto> vectorQuartos) {
         this.numeroReserva = numeroReserva;
         this.entrada = entrada;
         this.saida = saida;
@@ -22,7 +23,7 @@ public class Reserva implements Serializable{
         this.diarias = diarias;
         this.pgtReserva = pgtReserva;
         this.Cpf = Cpf;
-        this.quartos = vectorQuartos;
+        this.Quartos = vectorQuartos;
     }
 
     public int getNumeroReserva() {
@@ -57,12 +58,21 @@ public class Reserva implements Serializable{
         this.desconto = desconto;
     }
 
-    public Vector getQuartos() {
-        return quartos;
+    public ArrayList<Quarto> getQuartos() {
+        return Quartos;
     }
-
-    public void setQuartos(Vector quartos) {
-        this.quartos = quartos;
+    
+    public Vector getQuartosVet() {
+        Vector vetQuartos = new Vector();
+        for(int i = 0;i<Quartos.size();i++){
+            vetQuartos.add(Quartos.get(i).getNumero());
+            
+        }
+        return vetQuartos;
+    }
+    
+    public void setQuartos(ArrayList<Quarto>  quartos) {
+        this.Quartos = quartos;
     }
 
     public Pagamento getDiarias() {
