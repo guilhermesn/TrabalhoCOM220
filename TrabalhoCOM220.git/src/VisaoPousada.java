@@ -22,10 +22,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -592,6 +595,9 @@ public class VisaoPousada extends JFrame implements ActionListener {
         gc.insets = new Insets(0, 3, 3, 0);
         gc.gridwidth = 1;
         gc.gridheight = 1;
+        SpinnerNumberModel model =new SpinnerNumberModel(10,0,100,1);
+        final JSpinner jSDesconto = new JSpinner();
+        jSDesconto.setModel(model);
         MaskFormatter mascaraData = null;
         final JLabel valorDiarias = new JLabel("0.0");
         try {
@@ -660,8 +666,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
                     }
 
-                    controle.CadastrarReserva(dateini, datefim, 10, controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
-
+                    controle.CadastrarReserva(dateini, datefim, Integer.parseInt(jSDesconto.getValue().toString()), controle.ListaClientes().get(jCBCliente.getSelectedIndex()).getCPF(), vectorQuartos);
+                    for (int i = modelo1.getRowCount(); i > 0; i--) {
+                        modelo1.removeRow(0);
+                    }
+                    JOptionPane.showMessageDialog(null,"Reserva realizada com sucesso!");
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -830,7 +839,15 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p6.add(valorDiarias, gc);
         
         gc.gridx = 0;
-        gc.gridy = 7;
+        gc.gridy =7;
+        p6.add(new JLabel("Porcentagem de desconto"), gc);
+        
+        gc.gridx = 0;
+        gc.gridy = 8;
+        p6.add( jSDesconto , gc);
+        
+        gc.gridx = 0;
+        gc.gridy = 9;
         p6.add(ReservarQt, gc);
 
         panelLista1.add(barraRolagem1, BorderLayout.CENTER);
