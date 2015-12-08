@@ -59,7 +59,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTextField EdtNomeCliente = new JTextField();
     private JTextField EdtEnderecoCliente = new JTextField();
     private JTextField EdtTelefoneCliente = new JTextField();
-    private JTextArea textArea = new JTextArea(5, 20);
+    private JTextArea textArea1 = new JTextArea(5, 20);
+    private JTextArea textArea2 = new JTextArea(5, 20);
+    private JTextArea textArea3 = new JTextArea(5, 20);
+    private JTextArea textArea4 = new JTextArea(5, 20);
+    
     private JFormattedTextField dataInicial;
     private JFormattedTextField dataFinal;
 
@@ -99,6 +103,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private javax.swing.JMenuItem jMenuPagamento;
     private javax.swing.JMenuItem jRelatorioCancelado;
     private javax.swing.JMenuItem jRelatorioData;
+    private javax.swing.JMenuItem jRelatorioDoDia;
+    private javax.swing.JMenuItem jRelatorioNaoPG;
     private javax.swing.JMenu jCadastrar;
     private javax.swing.JMenu jVisualisar;
     private javax.swing.JMenu jRelatorio;
@@ -145,7 +151,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         cards.add("EditarQuarto", gerarPEditarQuarto());
         cards.add("RealizarPagamento", gerarPRealizarPagamento());
+        
         cards.add("GerarRelatorioPeriodo", gerarPRelatorioPeriodo());
+        cards.add("GerarRelatorioEfetivar", gerarPRelatorioEfetivar());
+        cards.add("GerarRelatorioCanceladas", gerarPRelatorioCanceladas());
+        cards.add("GerarRelatorioNaoPagos", gerarPRelatorioNaoPagos());
 
     }
 
@@ -165,14 +175,25 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuPagamento = new javax.swing.JMenuItem();
         jRelatorioCancelado = new javax.swing.JMenuItem();
         jRelatorioData = new javax.swing.JMenuItem();
+        jRelatorioDoDia = new javax.swing.JMenuItem();
+        jRelatorioNaoPG = new javax.swing.JMenuItem();
+
+        jRelatorioNaoPG.setText("Relatorio de não pagos");
+        jRelatorioDoDia.setText("Relatorio a serem efetivadas");
         jRelatorioCancelado.setText("Gerar Relatório de Reservas Canceladas");
         jRelatorioData.setText("Gerar no período");
+
         jRelatorioCancelado.addActionListener(this);
         jRelatorio.add(jRelatorioData);
         jRelatorio.add(jRelatorioCancelado);
         jCadastrar.setText("Cadastrar");
         jRelatorioData.addActionListener(this);
         jMenuBar1.add(jCadastrar);
+
+        jRelatorio.add(jRelatorioDoDia);
+        jRelatorio.add(jRelatorioNaoPG);
+        jRelatorioDoDia.addActionListener(this);
+        jRelatorioNaoPG.addActionListener(this);
 
         jVisualisar.setText("Consultar");
         jMenuBar1.add(jVisualisar);
@@ -303,8 +324,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 escolheArquivo();
             }
         });
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea1);
+        textArea1.setEditable(false);
 
         dataIniciorRelatorio = new JFormattedTextField(mascaraData);
         dataFimRelatorio = new JFormattedTextField(mascaraData);
@@ -320,7 +341,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
                     dateini = formatter.parse(dataInicial.getText());
                     datefim = formatter.parse(dataFinal.getText());
 
-                    textArea.setText(controle.relatorioPorData(dateini,datefim));
+                    textArea1.setText(controle.relatorioPorData(dateini, datefim));
 
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
@@ -329,18 +350,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
             }
         });
 
-        JScrollPane barraRolagem; // ScrollBar para panelControle
-        modeloRelatorio = new nonEditableJTable();
-        jTabelaRelatorio = new JTable(modeloRelatorio);
-
-        // Colunas da lista de Clientes
-        modeloRelatorio.addColumn("Número");
-        modeloRelatorio.addColumn("Descrição");
-        modeloRelatorio.addColumn("Preço");
-
         panelLista.setLayout(new BorderLayout());
         panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
-        barraRolagem = new JScrollPane(jTabelaRelatorio);
 
         panelLista.add(scrollPane, BorderLayout.CENTER);
 
@@ -352,6 +363,98 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p2.add(BorderLayout.NORTH, dataInicial);
         p2.add(BorderLayout.NORTH, dataFinal);
         p2.add(BorderLayout.NORTH, bPesquisarQuartoDisponiveis);
+        p2.add(BorderLayout.NORTH, bEscolherPasta);
+
+        p1.add(BorderLayout.NORTH, p2);
+
+        return p1;
+
+    }
+
+    public JPanel gerarPRelatorioEfetivar() {
+        JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        JButton bEscolherPasta = new JButton("Salvar");
+
+        bEscolherPasta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                escolheArquivo();
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(textArea2);
+        textArea2.setEditable(false);
+        
+        textArea2.setText(this.controle.GeraRelatorioReservaDoDia());
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+     
+
+        panelLista.add(scrollPane, BorderLayout.CENTER);
+
+        p1.add(panelLista);
+        p1.add(BorderLayout.CENTER, panelLista);
+        p2.add(BorderLayout.NORTH, bEscolherPasta);
+
+        p1.add(BorderLayout.NORTH, p2);
+
+        return p1;
+
+    }
+
+    public JPanel gerarPRelatorioCanceladas() {
+        JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        
+        JButton bEscolherPasta = new JButton("Salvar");
+
+        bEscolherPasta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                escolheArquivo();
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(textArea3);
+        textArea3.setEditable(false);
+        textArea3.setText(this.controle.GeraRelatorioReservaCancelada());
+        
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+        panelLista.add(scrollPane, BorderLayout.CENTER);
+
+        p1.add(panelLista);
+        p1.add(BorderLayout.CENTER, panelLista);
+        p2.add(BorderLayout.NORTH, bEscolherPasta);
+
+        p1.add(BorderLayout.NORTH, p2);
+
+        return p1;
+
+    }
+
+    public JPanel gerarPRelatorioNaoPagos() {
+        JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+       
+        JButton bEscolherPasta = new JButton("Salvar");
+
+        bEscolherPasta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                escolheArquivo();
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(textArea4);
+        textArea4.setEditable(false);
+        textArea4.setText(this.controle.GeraRelatorioReservaNaoPaga());
+      
+
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+       panelLista.add(scrollPane, BorderLayout.CENTER);
+
+        p1.add(panelLista);
+        p1.add(BorderLayout.CENTER, panelLista);
         p2.add(BorderLayout.NORTH, bEscolherPasta);
 
         p1.add(BorderLayout.NORTH, p2);
@@ -1291,12 +1394,25 @@ public class VisaoPousada extends JFrame implements ActionListener {
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "RealizarPagamento");
         } else if (e.getSource() == jRelatorioCancelado) {
-
-            controle.GeraRelatorioReservaCancelada();
+            atualizaInterface();
+            layout = (CardLayout) cards.getLayout();
+            layout.show(cards, "GerarRelatorioCanceladas");
         } else if (e.getSource() == jRelatorioData) {
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
             layout.show(cards, "GerarRelatorioPeriodo");
+        } else if (e.getSource() == jRelatorioDoDia) {
+            atualizaInterface();
+            layout = (CardLayout) cards.getLayout();
+            layout.show(cards, "GerarRelatorioEfetivar");
+        } else if (e.getSource() == jRelatorioNaoPG) {
+            atualizaInterface();
+            layout = (CardLayout) cards.getLayout();
+            layout.show(cards, "GerarRelatorioNaoPagos");
         }
+        
+        
+        
+        
     }
 }
