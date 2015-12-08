@@ -35,7 +35,7 @@ public class CtrlPousada implements Serializable {
         }
 
         VerificaReservas();
-        GeraRelatorioReservaCancelada();
+        //GeraRelatorioReservaCancelada();
     }
 
     public void VerificaReservas() {
@@ -62,7 +62,7 @@ public class CtrlPousada implements Serializable {
         }
     }
 
-    public void GeraRelatorioReservaCancelada() {
+    public String GeraRelatorioReservaCancelada() {
         String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
         String nome = "";
         for (int i = 0; i < ReservasCanceladas.size(); i++) {
@@ -73,7 +73,8 @@ public class CtrlPousada implements Serializable {
             }
             
             relatorio += i + "\t" + ReservasCanceladas.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasCanceladas.get(i).getEntrada() + "\t" + ReservasCanceladas.get(i).getDiarias().getValorTotal() +"\n";
-        }                
+        }          
+        return relatorio;
     }
     
     public void GeraRelatorioReservaDoDia() {

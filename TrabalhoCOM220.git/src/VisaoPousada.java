@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.DocumentEvent;
@@ -57,12 +58,15 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTextField EdtNomeCliente = new JTextField();
     private JTextField EdtEnderecoCliente = new JTextField();
     private JTextField EdtTelefoneCliente = new JTextField();
-
+private JTextArea textArea = new JTextArea(5, 20);
     private JFormattedTextField dataInicial;
     private JFormattedTextField dataFinal;
 
-    JFormattedTextField dataInicio;
-    JFormattedTextField dataFim;
+    private JFormattedTextField dataInicio;
+    private JFormattedTextField dataFim;
+
+    private JFormattedTextField dataIniciorRelatorio;
+    private JFormattedTextField dataFimRelatorio;
 
     private JButton bCadastrarCliente;
     private JButton bCadastrarQuarto;
@@ -76,7 +80,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JButton bVoltarQuarto;
     private JButton bModificarQuarto;
     private JButton bPagarReserva;
-    
+
     private JButton bReservarQuartoDisponiveis;
 
     private JButton bExcluirReserva;
@@ -93,6 +97,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private javax.swing.JMenuItem jMenuConsultaReserva;
     private javax.swing.JMenuItem jMenuPagamento;
     private javax.swing.JMenuItem jRelatorioCancelado;
+    private javax.swing.JMenuItem jRelatorioData;
     private javax.swing.JMenu jCadastrar;
     private javax.swing.JMenu jVisualisar;
     private javax.swing.JMenu jRelatorio;
@@ -106,6 +111,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaQuartoDispRes;
     private JTable jTabelaQuartoARes;
     private JTable jTabelaReserva;
+    private JTable jTabelaRelatorio;
     private CardLayout layout;
     private DefaultTableModel modeloVRes = new nonEditableJTable();
     private DefaultTableModel modeloQuartos = new nonEditableJTable();
@@ -113,6 +119,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private DefaultTableModel modelo2 = new nonEditableJTable();
     private DefaultTableModel modelo1 = new nonEditableJTable();
+    private DefaultTableModel modeloRelatorio = new nonEditableJTable();
     private String JTF_data;
 
     public VisaoPousada(CtrlPousada pousada) {
@@ -121,8 +128,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public void atualizaInterface() {
-        
-        JTF_data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));        
+
+        JTF_data = (new SimpleDateFormat("dd/MM/yyyy").format(new Date(System.currentTimeMillis())));
 
         cards.add("Menu", gerarPMain());
         cards.add("CadastrarCliente", gerarPCadastraCliente());
@@ -137,12 +144,13 @@ public class VisaoPousada extends JFrame implements ActionListener {
         cards.add("ConfirmaCliente", gerarPConfirmaCliente());
         cards.add("EditarQuarto", gerarPEditarQuarto());
         cards.add("RealizarPagamento", gerarPRealizarPagamento());
+        cards.add("GerarRelatorioPeriodo", gerarPRelatorioPeriodo());
 
     }
 
     private void iniciaBotoes() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();        
+        jMenuBar1 = new javax.swing.JMenuBar();
         jCadastrar = new javax.swing.JMenu();
         jVisualisar = new javax.swing.JMenu();
         jRelatorio = new javax.swing.JMenu();
@@ -155,13 +163,14 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuConsultaReserva = new javax.swing.JMenuItem();
         jMenuPagamento = new javax.swing.JMenuItem();
         jRelatorioCancelado = new javax.swing.JMenuItem();
-
+        jRelatorioData = new javax.swing.JMenuItem();
         jRelatorioCancelado.setText("Gerar Relatório de Reservas Canceladas");
+        jRelatorioData.setText("Gerar no período");
         jRelatorioCancelado.addActionListener(this);
         jRelatorio.add(jRelatorioCancelado);
-        
-        
+        jRelatorio.add(jRelatorioData);
         jCadastrar.setText("Cadastrar");
+        jRelatorioData.addActionListener(this);
         jMenuBar1.add(jCadastrar);
 
         jVisualisar.setText("Consultar");
@@ -259,16 +268,88 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         setVisible(true);
     }
-    
-    public JPanel gerarPMain(){
+
+    public JPanel gerarPMain() {
         Icon logo = new ImageIcon("logo.jpg");
         JLabel imagem = new JLabel(logo);
-                
+
         JPanel p = new JPanel();
-        p.setLayout(new GridLayout(1,1));
+        p.setLayout(new GridLayout(1, 1));
         p.add(imagem);
-        
+
         return p;
+    }
+
+    public JPanel gerarPRelatorioPeriodo() {
+        JPanel panelLista = new JPanel();
+        JPanel p1 = new JPanel(new BorderLayout());
+        JPanel p2 = new JPanel(new FlowLayout());
+        JButton bPesquisarQuartoDisponiveis;
+        bPesquisarQuartoDisponiveis = new JButton("Pesquisar");
+
+        MaskFormatter mascaraData = null;
+        try {
+            mascaraData = new MaskFormatter("##/##/####");
+            mascaraData.setPlaceholderCharacter('_');
+        } catch (ParseException excp) {
+            System.err.println("Erro na formatação: " + excp.getMessage());
+        }
+        
+        
+        JScrollPane scrollPane = new JScrollPane(textArea); 
+        textArea.setEditable(false);
+
+        dataIniciorRelatorio = new JFormattedTextField(mascaraData);
+        dataFimRelatorio = new JFormattedTextField(mascaraData);
+
+        bPesquisarQuartoDisponiveis.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                Date dateini;
+                Date datefim;
+
+                try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    dateini = formatter.parse(dataInicial.getText());
+                    datefim = formatter.parse(dataFinal.getText());
+
+                     textArea.setText(controle.GeraRelatorioReservaCancelada());
+                     
+
+                } catch (ParseException ex) {
+                    Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
+        
+        JScrollPane barraRolagem; // ScrollBar para panelControle
+        modeloRelatorio = new nonEditableJTable();
+        jTabelaRelatorio = new JTable(modeloRelatorio);
+
+        // Colunas da lista de Clientes
+        modeloRelatorio.addColumn("Número");
+        modeloRelatorio.addColumn("Descrição");
+        modeloRelatorio.addColumn("Preço");
+
+        panelLista.setLayout(new BorderLayout());
+        panelLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10)); // Bordas para o JTable
+        barraRolagem = new JScrollPane(jTabelaRelatorio);
+
+        panelLista.add(scrollPane, BorderLayout.CENTER);
+
+        dataInicial.setText(JTF_data);
+        dataFinal.setText(JTF_data);
+
+        p1.add(panelLista);
+        p1.add(BorderLayout.CENTER, panelLista);
+        p2.add(BorderLayout.NORTH, dataInicial);
+        p2.add(BorderLayout.NORTH, dataFinal);
+        p2.add(BorderLayout.NORTH, bPesquisarQuartoDisponiveis);
+        p1.add(BorderLayout.NORTH, p2);
+
+        return p1;
+
     }
 
     public JPanel gerarPCadastraCliente() {
@@ -318,11 +399,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
     }
 
     public JPanel gerarPRealizarPagamento() {
-         JPanel panelLista = new JPanel();
+        JPanel panelLista = new JPanel();
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
         JScrollPane barraRolagem; // ScrollBar para panelControle
-       
+
         modeloVRes = new nonEditableJTable();
         jTabelaReserva = new JTable(modeloVRes);
 
@@ -335,9 +416,9 @@ public class VisaoPousada extends JFrame implements ActionListener {
         modeloVRes.addColumn("Valor Pago");
         modeloVRes.addColumn("Valor Restante");
         modeloVRes.addColumn("Estado");
-        
-         bPagarReserva = new JButton("Realizar pagamento");
-         
+
+        bPagarReserva = new JButton("Realizar pagamento");
+
         for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
 
             Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva())};
@@ -347,16 +428,16 @@ public class VisaoPousada extends JFrame implements ActionListener {
         bPagarReserva.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
-                if(controle.CalculaValAPG(Integer.parseInt(numeroReserva))>0){
-                String valor = JOptionPane.showInputDialog(null, "Para garantir a reserva o valor a ser pago é: " + (controle.getReserva(Integer.parseInt(numeroReserva)).getPgtReserva().getValorTotal()-controle.getReserva(Integer.parseInt(numeroReserva)).getPgtReserva().getValorPg())+ "\nO valor total a ser pago é: " +controle.CalculaValAPG(Integer.parseInt(numeroReserva)) );
-                controle.realizaPagamento(Integer.parseInt(numeroReserva),Double.parseDouble(valor));
-                }else{
+                if (controle.CalculaValAPG(Integer.parseInt(numeroReserva)) > 0) {
+                    String valor = JOptionPane.showInputDialog(null, "Para garantir a reserva o valor a ser pago é: " + (controle.getReserva(Integer.parseInt(numeroReserva)).getPgtReserva().getValorTotal() - controle.getReserva(Integer.parseInt(numeroReserva)).getPgtReserva().getValorPg()) + "\nO valor total a ser pago é: " + controle.CalculaValAPG(Integer.parseInt(numeroReserva)));
+                    controle.realizaPagamento(Integer.parseInt(numeroReserva), Double.parseDouble(valor));
+                } else {
                     JOptionPane.showMessageDialog(null, "Esta reserva já está paga!");
                 }
-                 atualizaInterface();
-            layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "RealizarPagamento");
-                
+                atualizaInterface();
+                layout = (CardLayout) cards.getLayout();
+                layout.show(cards, "RealizarPagamento");
+
             }
         });
 
@@ -378,8 +459,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
         return p1;
     }
 
-    
-    
     public JPanel gerarPEditarCliente() {
         GridBagLayout grid = new GridBagLayout();
         GridBagConstraints gc = new GridBagConstraints();
@@ -984,7 +1063,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 if (comfirmacao == 0) {
                     //modeloVRes.removeRow(jTabelaReserva.getSelectedRow());
                     controle.RemoverReserva(Integer.parseInt(numeroReserva));
-                     atualizaInterface();
+                    atualizaInterface();
                     layout = (CardLayout) cards.getLayout();
                     layout.show(cards, "VisualizarReserva");
                 }
@@ -1059,8 +1138,6 @@ public class VisaoPousada extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        
-
         if (e.getSource() == jMenuCadastraCliente) {
 
             atualizaInterface();
@@ -1131,8 +1208,8 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "CadastrarCliente");            
-        
+            layout.show(cards, "CadastrarCliente");
+
         } else if (e.getSource() == bModificarQuarto) {
 
             this.controle.AlterarQuarto(Double.parseDouble(precoEditQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoEditQuarto.getText());
@@ -1171,10 +1248,14 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "RealizarPagamento");        
+            layout.show(cards, "RealizarPagamento");
         } else if (e.getSource() == jRelatorioCancelado) {
 
             controle.GeraRelatorioReservaCancelada();
+        } else if (e.getSource() == jRelatorioData) {
+            atualizaInterface();
+            layout = (CardLayout) cards.getLayout();
+            layout.show(cards, "GerarRelatorioPeriodo");
         }
     }
 }
