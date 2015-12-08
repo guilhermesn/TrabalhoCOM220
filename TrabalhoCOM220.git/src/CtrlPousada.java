@@ -25,7 +25,6 @@ public class CtrlPousada {
         this.view = new VisaoPousada(this);
         view.gerarInterface();
 
-
         try {
             desserializaCliente();
             desserializaQuarto();
