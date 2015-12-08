@@ -158,7 +158,13 @@ public class CtrlPousada implements Serializable {
         arquiva();
     }
 
-    public void CadastrarReserva(Date entrada, Date saida, int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
+    public void CadastrarReserva (Date entrada, Date saida, int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) throws Exception {
+        if (entrada.after(saida)) {
+            throw new Exception("A data de saída não pode ser menor que a de entrada!");
+        }
+        if (entrada.equals(saida)) {
+            throw new Exception("A data de entrada e saída não podem ser iguais!");
+        }
         int numeroReserva = 1;
         if (Reservas.size() > 0) {
             numeroReserva = Reservas.get(Reservas.size() - 1).getNumeroReserva();
