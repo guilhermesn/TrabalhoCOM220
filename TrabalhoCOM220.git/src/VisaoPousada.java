@@ -22,6 +22,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -58,7 +59,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTextField EdtNomeCliente = new JTextField();
     private JTextField EdtEnderecoCliente = new JTextField();
     private JTextField EdtTelefoneCliente = new JTextField();
-private JTextArea textArea = new JTextArea(5, 20);
+    private JTextArea textArea = new JTextArea(5, 20);
     private JFormattedTextField dataInicial;
     private JFormattedTextField dataFinal;
 
@@ -167,8 +168,8 @@ private JTextArea textArea = new JTextArea(5, 20);
         jRelatorioCancelado.setText("Gerar Relatório de Reservas Canceladas");
         jRelatorioData.setText("Gerar no período");
         jRelatorioCancelado.addActionListener(this);
+        jRelatorio.add(jRelatorioData);
         jRelatorio.add(jRelatorioCancelado);
-
         jCadastrar.setText("Cadastrar");
         jRelatorioData.addActionListener(this);
         jMenuBar1.add(jCadastrar);
@@ -285,6 +286,8 @@ private JTextArea textArea = new JTextArea(5, 20);
         JPanel p1 = new JPanel(new BorderLayout());
         JPanel p2 = new JPanel(new FlowLayout());
         JButton bPesquisarQuartoDisponiveis;
+        JButton bEscolherPasta = new JButton("Salvar");
+
         bPesquisarQuartoDisponiveis = new JButton("Pesquisar");
 
         MaskFormatter mascaraData = null;
@@ -294,9 +297,13 @@ private JTextArea textArea = new JTextArea(5, 20);
         } catch (ParseException excp) {
             System.err.println("Erro na formatação: " + excp.getMessage());
         }
-        
-        
-        JScrollPane scrollPane = new JScrollPane(textArea); 
+
+        bEscolherPasta.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                escolheArquivo();
+            }
+        });
+        JScrollPane scrollPane = new JScrollPane(textArea);
         textArea.setEditable(false);
 
         dataIniciorRelatorio = new JFormattedTextField(mascaraData);
@@ -313,8 +320,7 @@ private JTextArea textArea = new JTextArea(5, 20);
                     dateini = formatter.parse(dataInicial.getText());
                     datefim = formatter.parse(dataFinal.getText());
 
-                     textArea.setText(controle.GeraRelatorioReservaCancelada());
-                     
+                    textArea.setText(controle.GeraRelatorioReservaCancelada());
 
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
@@ -322,7 +328,7 @@ private JTextArea textArea = new JTextArea(5, 20);
 
             }
         });
-        
+
         JScrollPane barraRolagem; // ScrollBar para panelControle
         modeloRelatorio = new nonEditableJTable();
         jTabelaRelatorio = new JTable(modeloRelatorio);
@@ -346,6 +352,8 @@ private JTextArea textArea = new JTextArea(5, 20);
         p2.add(BorderLayout.NORTH, dataInicial);
         p2.add(BorderLayout.NORTH, dataFinal);
         p2.add(BorderLayout.NORTH, bPesquisarQuartoDisponiveis);
+        p2.add(BorderLayout.NORTH, bEscolherPasta);
+
         p1.add(BorderLayout.NORTH, p2);
 
         return p1;
@@ -1133,6 +1141,22 @@ private JTextArea textArea = new JTextArea(5, 20);
         p1.add(bModificarQuarto, gc);
 
         return p1;
+    }
+
+    public static String escolheArquivo() {
+
+        String arquivoWave;
+        JFileChooser arquivo = new JFileChooser();
+        arquivo.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        if (arquivo.showOpenDialog(arquivo) == JFileChooser.APPROVE_OPTION) {
+            arquivoWave = arquivo.getSelectedFile().getPath();
+        } else {
+            arquivoWave = "";
+
+        }
+
+        return arquivoWave;
     }
 
     @Override

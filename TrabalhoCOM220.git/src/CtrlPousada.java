@@ -68,14 +68,16 @@ public class CtrlPousada implements Serializable {
     public String GeraRelatorioReservaCancelada() {
         String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
         String nome = "";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+        String date;
         for (int i = 0; i < ReservasCanceladas.size(); i++) {
             for (int n = 0; n < Clientes.size(); n++) {
                 if (Clientes.get(n).getCPF().equals(ReservasCanceladas.get(i).getCpf())) {
                     nome = Clientes.get(n).getNome();
                 }
             }
-            
-            relatorio += i + "\t" + ReservasCanceladas.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasCanceladas.get(i).getEntrada() + "\t" + ReservasCanceladas.get(i).getDiarias().getValorTotal() +"\n";
+            date = simpleDateFormat.format(ReservasCanceladas.get(i).getEntrada());
+            relatorio += i + "\t" + ReservasCanceladas.get(i).getNumeroReserva() + "\t" + nome + "\t" + date + "\t" + ReservasCanceladas.get(i).getDiarias().getValorTotal() +"\n";
         }          
         return relatorio;
     }
