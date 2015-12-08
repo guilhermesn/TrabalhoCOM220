@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 
 public class CtrlPousada {
 
@@ -19,6 +20,8 @@ public class CtrlPousada {
     private final VisaoPousada view;
 
     public CtrlPousada() throws Exception {
+        
+
         this.view = new VisaoPousada(this);
         view.gerarInterface();
 
@@ -28,7 +31,25 @@ public class CtrlPousada {
             desserializaReserva();
         } catch (Exception e) {
         }
+        
+        VerificaReservas();
 
+    }
+
+    public void VerificaReservas() {
+        Date hoje = new Date(System.currentTimeMillis());
+        Calendar data1 = Calendar.getInstance();
+        Calendar data2 = Calendar.getInstance();
+        data1.setTime(hoje);        
+        if (Reservas.size() != 0) {            
+            for (int i = 0; i < Reservas.size(); i++) {                
+                data2.setTime(Reservas.get(i).getEntrada());                                
+                if (data2.get(Calendar.DAY_OF_YEAR) + 3 >= data1.get(Calendar.DAY_OF_YEAR)) {
+                    JOptionPane.showMessageDialog(null, "asdasfja2");
+
+                }
+            }
+        }        
     }
 
     public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {
@@ -194,15 +215,15 @@ public class CtrlPousada {
                     falta = this.Reservas.get(i).getPgtReserva().getValorTotal() - this.Reservas.get(i).getPgtReserva().getValorPg();
                     if (pagamento >= falta) {
                         this.Reservas.get(i).getPgtReserva().setValorPg(falta + this.Reservas.get(i).getPgtReserva().getValorPg());
-                        if(pagamento-falta>0){
-                            this.Reservas.get(i).getDiarias().setValorPg(pagamento-falta);   
+                        if (pagamento - falta > 0) {
+                            this.Reservas.get(i).getDiarias().setValorPg(pagamento - falta);
                         }
                     } else {
-                        this.Reservas.get(i).getPgtReserva().setValorPg(pagamento+ this.Reservas.get(i).getPgtReserva().getValorPg());
+                        this.Reservas.get(i).getPgtReserva().setValorPg(pagamento + this.Reservas.get(i).getPgtReserva().getValorPg());
                     }
 
-                }else{
-                    this.Reservas.get(i).getDiarias().setValorPg(pagamento+this.Reservas.get(i).getDiarias().getValorPg());
+                } else {
+                    this.Reservas.get(i).getDiarias().setValorPg(pagamento + this.Reservas.get(i).getDiarias().getValorPg());
                 }
             }
         }
