@@ -9,17 +9,15 @@ public class Reserva implements Serializable{
     private int numeroReserva;
     private Date entrada;
     private Date saida;
-    private int desconto;
     private ArrayList<Quarto> Quartos = new ArrayList<>();
     private Pagamento diarias;
     private Pagamento pgtReserva;
     private String Cpf;
 
-    public Reserva(int numeroReserva, Date entrada, Date saida, int desconto, Pagamento diarias, Pagamento pgtReserva, String Cpf,ArrayList<Quarto> vectorQuartos) {
+    public Reserva(int numeroReserva, Date entrada, Date saida, Pagamento diarias, Pagamento pgtReserva, String Cpf,ArrayList<Quarto> vectorQuartos) {
         this.numeroReserva = numeroReserva;
         this.entrada = entrada;
         this.saida = saida;
-        this.desconto = desconto;
         this.diarias = diarias;
         this.pgtReserva = pgtReserva;
         this.Cpf = Cpf;
@@ -50,14 +48,7 @@ public class Reserva implements Serializable{
         this.saida = saida;
     }
 
-    public int getDesconto() {
-        return desconto;
-    }
-
-    public void setDesconto(int desconto) {
-        this.desconto = desconto;
-    }
-
+ 
     public ArrayList<Quarto> getQuartos() {
         return Quartos;
     }

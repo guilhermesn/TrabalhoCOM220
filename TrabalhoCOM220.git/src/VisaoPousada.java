@@ -105,7 +105,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private JTable jTabelaQuartoDispRes;
     private JTable jTabelaQuartoARes;
     private JTable jTabelaReserva;
-
+    private CardLayout layout;
     private DefaultTableModel modeloVRes = new nonEditableJTable();
     private DefaultTableModel modeloQuartos = new nonEditableJTable();
     private DefaultTableModel modelo = new nonEditableJTable();
@@ -327,23 +327,29 @@ public class VisaoPousada extends JFrame implements ActionListener {
         modeloVRes.addColumn("Quartos");
         modeloVRes.addColumn("Valor Pago");
         modeloVRes.addColumn("Valor Restante");
-        modeloVRes.addColumn("Desconto");
         modeloVRes.addColumn("Estado");
         
          bPagarReserva = new JButton("Realizar pagamento");
          
         for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
 
-            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
+            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva())};
             modeloVRes.addRow(dados);
         }
 
         bPagarReserva.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
-                String valor = JOptionPane.showInputDialog(null, "Para garantir a reserva  o valor minimo a ser pago é: " + (controle.getReserva(Integer.parseInt(numeroReserva)).getDiarias().getValorTotal()-controle.getReserva(Integer.parseInt(numeroReserva)).getDiarias().getValorPg()-controle.CalculaDesconto(Integer.parseInt(numeroReserva)))+ "\nO valor total a ser pago é: " +controle.CalculaValAPG(Integer.parseInt(numeroReserva)) );
+                if(controle.CalculaValAPG(Integer.parseInt(numeroReserva))>0){
+                String valor = JOptionPane.showInputDialog(null, "Para garantir a reserva o valor a ser pago é: " + (controle.getReserva(Integer.parseInt(numeroReserva)).getPgtReserva().getValorTotal()-controle.getReserva(Integer.parseInt(numeroReserva)).getPgtReserva().getValorPg())+ "\nO valor total a ser pago é: " +controle.CalculaValAPG(Integer.parseInt(numeroReserva)) );
                 controle.realizaPagamento(Integer.parseInt(numeroReserva),Double.parseDouble(valor));
-
+                }else{
+                    JOptionPane.showMessageDialog(null, "Esta reserva já está paga!");
+                }
+                 atualizaInterface();
+            layout = (CardLayout) cards.getLayout();
+            layout.show(cards, "RealizarPagamento");
+                
             }
         });
 
@@ -365,57 +371,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         return p1;
     }
 
-    public JPanel gerarPEditarReserva() {
-        GridBagLayout grid = new GridBagLayout();
-        GridBagConstraints gc = new GridBagConstraints();
-        gc.fill = GridBagConstraints.EAST;
-        gc.insets = new Insets(0, 3, 3, 0);
-        gc.gridwidth = 1;
-        gc.gridheight = 1;
-
-        JPanel p1 = new JPanel(grid);
-        gc.gridx = 0;
-        gc.gridy = 0;
-        p1.add(new JLabel("CPF:"), gc);
-
-        gc.gridx = 1;
-        gc.gridy = 0;
-        p1.add(new JLabel(NEditCPF), gc);
-
-        if (NEditCPF != null) {
-            EdtNomeCliente.setText(controle.getCliente(NEditCPF).getEndereco());
-            EdtEnderecoCliente.setText(controle.getCliente(NEditCPF).getEndereco());
-            EdtTelefoneCliente.setText(controle.getCliente(NEditCPF).getTelefone());
-        }
-
-        gc.gridx = 0;
-        gc.gridy = 1;
-        p1.add(new JLabel("Nome:"), gc);
-
-        gc.gridx = 1;
-        gc.gridy = 1;
-        p1.add(EdtNomeCliente, gc);
-
-        gc.gridx = 0;
-        gc.gridy = 2;
-        p1.add(new JLabel("Endereço:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 2;
-        p1.add(EdtEnderecoCliente, gc);
-
-        gc.gridx = 0;
-        gc.gridy = 3;
-        p1.add(new JLabel("Telefone:"), gc);
-        gc.gridx = 1;
-        gc.gridy = 3;
-        p1.add(EdtTelefoneCliente, gc);
-
-        gc.gridx = 1;
-        gc.gridy = 4;
-        p1.add(bEditaCliente, gc);
-
-        return p1;
-    }
+    
     
     public JPanel gerarPEditarCliente() {
         GridBagLayout grid = new GridBagLayout();
@@ -1006,12 +962,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
         modeloVRes.addColumn("Quartos");
         modeloVRes.addColumn("Valor Pago");
         modeloVRes.addColumn("Valor Restante");
-        modeloVRes.addColumn("Desconto");
         modeloVRes.addColumn("Estado");
 
         for (int i = 0; i < this.controle.ListarReservas().size(); i++) {
 
-            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaDesconto(controle.ListarReservas().get(i).getNumeroReserva())};
+            Object[] dados = {controle.ListarReservas().get(i).getNumeroReserva(), controle.ListarReservas().get(i).getEntrada(), controle.ListarReservas().get(i).getSaida(), controle.ListarReservas().get(i).getCpf(), controle.ListarReservas().get(i).getQuartosVet(), controle.CalculaValPG(controle.ListarReservas().get(i).getNumeroReserva()), controle.CalculaValAPG(controle.ListarReservas().get(i).getNumeroReserva())};
             modeloVRes.addRow(dados);
         }
 
@@ -1094,7 +1049,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        CardLayout layout;
+        
 
         if (e.getSource() == jMenuCadastraCliente) {
 

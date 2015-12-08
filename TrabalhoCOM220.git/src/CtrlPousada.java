@@ -25,6 +25,7 @@ public class CtrlPousada {
         this.view = new VisaoPousada(this);
         view.gerarInterface();
 
+
         try {
             desserializaCliente();
             desserializaQuarto();
@@ -58,17 +59,17 @@ public class CtrlPousada {
         arquiva();
     }
 
-    public void CadastrarReserva(Date entrada, Date saida, int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
+    public void CadastrarReserva(Date entrada, Date saida,int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
         int numeroReserva = 1;
         if (Reservas.size() > 0) {
             numeroReserva = Reservas.get(Reservas.size() - 1).getNumeroReserva();
             numeroReserva++;
         }
 
-        Pagamento diarias = new Pagamento(this.TotalDiarias(entrada, saida, vectorQuartos));
-        Pagamento pgtReserva = new Pagamento(TotalDiarias(vectorQuartos));
+        Pagamento diarias = new Pagamento(TotalDiarias(entrada, saida, vectorQuartos)-((TotalDiarias(entrada, saida, vectorQuartos)/100)*desconto));
+        Pagamento pgtReserva = new Pagamento(TotalDiarias(vectorQuartos)-((TotalDiarias(vectorQuartos)/100)*desconto));
 
-        Reserva rs = new Reserva(numeroReserva, entrada, saida, desconto, diarias, pgtReserva, Cpf, vectorQuartos);
+        Reserva rs = new Reserva(numeroReserva, entrada, saida, diarias, pgtReserva, Cpf, vectorQuartos);
         Reservas.add(rs);
         arquiva();
 
@@ -171,15 +172,14 @@ public class CtrlPousada {
         return null;
     }
 
-    public double CalculaDesconto(int nroReserva) {
+    public double CalculaDesconto(int nroReserva, int desconto) {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValorTotal()) * (((double) (Reservas.get(i).getDesconto())) / 100);
+                total = (Reservas.get(i).getDiarias().getValorTotal()) * (((double) desconto) / 100);
                 return total;
             }
         }
-
         return total;
     }
 
@@ -199,7 +199,7 @@ public class CtrlPousada {
         double total = 0;
         for (int i = 0; i < this.Reservas.size(); i++) {
             if (this.Reservas.get(i).getNumeroReserva() == nroReserva) {
-                total = (Reservas.get(i).getDiarias().getValorTotal()) - CalculaValPG(nroReserva) - CalculaDesconto(nroReserva);
+                total = (Reservas.get(i).getDiarias().getValorTotal()) - CalculaValPG(nroReserva);
                 return total;
             }
         }
