@@ -23,10 +23,11 @@ public class Pagamento {
     }
 
     public void setValorPg(double valorPg) {
-        if(valorTotal-valorPg >= valorPg){
+        this.valorPg = valorPg;
+        if(this.valorPg>=this.valorTotal){
             situacao = true;
         }
-        this.valorPg = valorPg;
+        
     }
 
     public Boolean getSituacao() {
