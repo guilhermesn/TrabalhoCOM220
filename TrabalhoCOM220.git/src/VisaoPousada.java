@@ -92,6 +92,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
     private javax.swing.JMenuItem jMenuConsultaCliente;
     private javax.swing.JMenuItem jMenuConsultaReserva;
     private javax.swing.JMenuItem jMenuPagamento;
+    private javax.swing.JMenuItem jRelatorioCancelado;
     private javax.swing.JMenu jCadastrar;
     private javax.swing.JMenu jVisualisar;
     private javax.swing.JMenu jRelatorio;
@@ -153,7 +154,13 @@ public class VisaoPousada extends JFrame implements ActionListener {
         jMenuConsultaCliente = new javax.swing.JMenuItem();
         jMenuConsultaReserva = new javax.swing.JMenuItem();
         jMenuPagamento = new javax.swing.JMenuItem();
+        jRelatorioCancelado = new javax.swing.JMenuItem();
 
+        jRelatorioCancelado.setText("Gerar Relatório de Reservas Canceladas");
+        jRelatorioCancelado.addActionListener(this);
+        jRelatorio.add(jRelatorioCancelado);
+        
+        
         jCadastrar.setText("Cadastrar");
         jMenuBar1.add(jCadastrar);
 
@@ -1161,7 +1168,10 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
             atualizaInterface();
             layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "RealizarPagamento");
+            layout.show(cards, "RealizarPagamento");        
+        } else if (e.getSource() == jRelatorioCancelado) {
+
+            controle.GeraRelatorioReservaCancelada();
         }
     }
 }

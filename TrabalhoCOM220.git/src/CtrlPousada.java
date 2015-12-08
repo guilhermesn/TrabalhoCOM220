@@ -15,12 +15,13 @@ import javax.swing.JOptionPane;
 public class CtrlPousada {
 
     private ArrayList<Reserva> Reservas = new ArrayList<>();
+    private ArrayList<Reserva> ReservasCanceladas = new ArrayList<>();
+    private ArrayList<Reserva> ReservasDoDia = new ArrayList<>();
     private ArrayList<Quarto> Quartos = new ArrayList<>();
     private ArrayList<Cliente> Clientes = new ArrayList<>();
     private final VisaoPousada view;
 
     public CtrlPousada() throws Exception {
-        
 
         this.view = new VisaoPousada(this);
         view.gerarInterface();
@@ -31,25 +32,61 @@ public class CtrlPousada {
             desserializaReserva();
         } catch (Exception e) {
         }
-        
-        VerificaReservas();
 
+        VerificaReservas();
+        GeraRelatorioReservaCancelada();
     }
 
     public void VerificaReservas() {
         Date hoje = new Date(System.currentTimeMillis());
-        Calendar data1 = Calendar.getInstance();
+        Calendar HOJE = Calendar.getInstance();
         Calendar data2 = Calendar.getInstance();
-        data1.setTime(hoje);        
-        if (Reservas.size() != 0) {            
-            for (int i = 0; i < Reservas.size(); i++) {                
-                data2.setTime(Reservas.get(i).getEntrada());                                
-                if (data2.get(Calendar.DAY_OF_YEAR) + 3 >= data1.get(Calendar.DAY_OF_YEAR)) {
-                    JOptionPane.showMessageDialog(null, "asdasfja2");
-
+        HOJE.setTime(hoje);
+        if (Reservas.size() != 0) {
+            for (int i = 0; i < Reservas.size(); i++) {
+                data2.setTime(Reservas.get(i).getEntrada());
+                if (data2.get(Calendar.DAY_OF_YEAR) - 3 < HOJE.get(Calendar.DAY_OF_YEAR)) {
+                    if (Reservas.get(i).getPgtReserva().getSituacao() == false) {                        
+                        ReservasCanceladas.add(Reservas.get(i));
+                        Reservas.remove(i);
+                    }
+                }
+                if (data2.get(Calendar.DAY_OF_YEAR) - 3 == HOJE.get(Calendar.DAY_OF_YEAR)) {
+                    if (Reservas.get(i).getPgtReserva().getSituacao() == false) {                        
+                        ReservasDoDia.add(Reservas.get(i));
+                        Reservas.remove(i);
+                    }
                 }
             }
-        }        
+        }
+    }
+
+    public void GeraRelatorioReservaCancelada() {
+        String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
+        String nome = "";
+        for (int i = 0; i < ReservasCanceladas.size(); i++) {
+            for(int n=0;n<Clientes.size();n++)
+            {
+                if(Clientes.get(n).getCPF() == ReservasCanceladas.get(i).getCpf())
+                    nome = Clientes.get(n).getNome();
+            }
+            
+            relatorio += i + "\t" + ReservasCanceladas.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasCanceladas.get(i).getEntrada() + "\t" + ReservasCanceladas.get(i).getDiarias().getValorTotal() +"\n";
+        }                
+    }
+    
+    public void GeraRelatorioReservaDoDia() {
+        String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
+        String nome = "";
+        for (int i = 0; i < ReservasDoDia.size(); i++) {
+            for(int n=0;n<Clientes.size();n++)
+            {
+                if(Clientes.get(n).getCPF() == ReservasDoDia.get(i).getCpf())
+                    nome = Clientes.get(n).getNome();
+            }
+            
+            relatorio += i + "\t" + ReservasDoDia.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasDoDia.get(i).getEntrada() + "\t" + ReservasDoDia.get(i).getDiarias().getValorTotal() +"\n";
+        }                
     }
 
     public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {
@@ -58,15 +95,15 @@ public class CtrlPousada {
         arquiva();
     }
 
-    public void CadastrarReserva(Date entrada, Date saida,int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
+    public void CadastrarReserva(Date entrada, Date saida, int desconto, String Cpf, ArrayList<Quarto> vectorQuartos) {
         int numeroReserva = 1;
         if (Reservas.size() > 0) {
             numeroReserva = Reservas.get(Reservas.size() - 1).getNumeroReserva();
             numeroReserva++;
         }
 
-        Pagamento diarias = new Pagamento(TotalDiarias(entrada, saida, vectorQuartos)-((TotalDiarias(entrada, saida, vectorQuartos)/100)*desconto));
-        Pagamento pgtReserva = new Pagamento(TotalDiarias(vectorQuartos)-((TotalDiarias(vectorQuartos)/100)*desconto));
+        Pagamento diarias = new Pagamento(TotalDiarias(entrada, saida, vectorQuartos) - ((TotalDiarias(entrada, saida, vectorQuartos) / 100) * desconto));
+        Pagamento pgtReserva = new Pagamento(TotalDiarias(vectorQuartos) - ((TotalDiarias(vectorQuartos) / 100) * desconto));
 
         Reserva rs = new Reserva(numeroReserva, entrada, saida, diarias, pgtReserva, Cpf, vectorQuartos);
         Reservas.add(rs);
@@ -226,6 +263,7 @@ public class CtrlPousada {
                 }
             }
         }
+        arquiva();
 
     }
 
