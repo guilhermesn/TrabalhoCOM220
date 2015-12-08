@@ -69,7 +69,7 @@ public class CtrlPousada {
         String nome = "";
         for (int i = 0; i < ReservasCanceladas.size(); i++) {
             for (int n = 0; n < Clientes.size(); n++) {
-                if (Clientes.get(n).getCPF() == ReservasCanceladas.get(i).getCpf()) {
+                if (Clientes.get(n).getCPF().equals(ReservasCanceladas.get(i).getCpf())) {
                     nome = Clientes.get(n).getNome();
                 }
             }
@@ -84,7 +84,7 @@ public class CtrlPousada {
         String nome = "";
         for (int i = 0; i < ReservasDoDia.size(); i++) {
             for (int n = 0; n < Clientes.size(); n++) {
-                if (Clientes.get(n).getCPF() == ReservasDoDia.get(i).getCpf()) {
+                if (Clientes.get(n).getCPF().equals(ReservasDoDia.get(i).getCpf())) {
                     nome = Clientes.get(n).getNome();
                 }
             }
@@ -99,7 +99,7 @@ public class CtrlPousada {
         String nome = "";
         for (int i = 0; i < ReservasNaoPagas.size(); i++) {
             for (int n = 0; n < Clientes.size(); n++) {
-                if (Clientes.get(n).getCPF() == ReservasNaoPagas.get(i).getCpf()) {
+                if (Clientes.get(n).getCPF().equals(ReservasNaoPagas.get(i).getCpf())) {
                     nome = Clientes.get(n).getNome();
                 }
             }
