@@ -168,7 +168,7 @@ private JTextArea textArea = new JTextArea(5, 20);
         jRelatorioData.setText("Gerar no período");
         jRelatorioCancelado.addActionListener(this);
         jRelatorio.add(jRelatorioCancelado);
-        jRelatorio.add(jRelatorioData);
+
         jCadastrar.setText("Cadastrar");
         jRelatorioData.addActionListener(this);
         jMenuBar1.add(jCadastrar);
@@ -1178,24 +1178,33 @@ private JTextArea textArea = new JTextArea(5, 20);
             layout.show(cards, "VisualizarQuartoDisponivel");
 
         } else if (e.getSource() == bCadastrarQuarto) {
-            this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
-            numeroQuarto = new JTextField(5);
-            precoQuarto = new JTextField(10);
-            descricaoQuarto = new JTextField(25);
+            try {
+                this.controle.CadastraQuarto(Double.parseDouble(this.precoQuarto.getText()), Integer.parseInt(this.numeroQuarto.getText()), this.descricaoQuarto.getText());
+                numeroQuarto = new JTextField(5);
+                precoQuarto = new JTextField(10);
+                descricaoQuarto = new JTextField(25);
 
-            atualizaInterface();
-            layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "ConfirmaQuarto");
+                atualizaInterface();
+                layout = (CardLayout) cards.getLayout();
+                layout.show(cards, "ConfirmaQuarto");
+            } catch (Exception erro) {
+                JOptionPane.showMessageDialog(null, erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (e.getSource() == bCadastrarCliente) {
-            this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
-            cpfCliente = new JTextField(11);
-            nomeCliente = new JTextField(15);
-            enderecoCliente = new JTextField(20);
-            telefoneCliente = new JTextField(15);
+            try {
+                this.controle.CadastrarCliente(this.cpfCliente.getText(), this.nomeCliente.getText(), this.enderecoCliente.getText(), this.telefoneCliente.getText());
+                cpfCliente = new JTextField(11);
+                nomeCliente = new JTextField(15);
+                enderecoCliente = new JTextField(20);
+                telefoneCliente = new JTextField(15);
 
-            atualizaInterface();
-            layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "ConfirmaCliente");
+                atualizaInterface();
+                layout = (CardLayout) cards.getLayout();
+                layout.show(cards, "ConfirmaCliente");
+            } catch (Exception erro) {
+                JOptionPane.showMessageDialog(null, erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
         } else if (e.getSource() == bCadastrarReserva) {
 
         } else if (e.getSource() == bEditarQuarto) {
@@ -1212,12 +1221,16 @@ private JTextArea textArea = new JTextArea(5, 20);
 
         } else if (e.getSource() == bModificarQuarto) {
 
-            this.controle.AlterarQuarto(Double.parseDouble(precoEditQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoEditQuarto.getText());
-            precoEditQuarto = new JTextField(10);
-            descricaoEditQuarto = new JTextField(25);
-            atualizaInterface();
-            layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "VisualizarQuarto");
+            try {
+                this.controle.AlterarQuarto(Double.parseDouble(precoEditQuarto.getText()), Integer.parseInt(NEditQuarto), descricaoEditQuarto.getText());
+                precoEditQuarto = new JTextField(10);
+                descricaoEditQuarto = new JTextField(25);
+                atualizaInterface();
+                layout = (CardLayout) cards.getLayout();
+                layout.show(cards, "VisualizarQuarto");
+            } catch (Exception erro) {
+                JOptionPane.showMessageDialog(null, erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (e.getSource() == bVoltarQuarto) {
             numeroQuarto = new JTextField(5);
             precoQuarto = new JTextField(10);
@@ -1240,10 +1253,14 @@ private JTextArea textArea = new JTextArea(5, 20);
             layout.show(cards, "EditarCliente");
         } else if (e.getSource() == bEditaCliente) {
 
-            this.controle.AlterarCliente(NEditCPF, this.EdtNomeCliente.getText(), this.EdtEnderecoCliente.getText(), this.EdtTelefoneCliente.getText());
-            atualizaInterface();
-            layout = (CardLayout) cards.getLayout();
-            layout.show(cards, "VisualizarCliente");
+            try {
+                this.controle.AlterarCliente(NEditCPF, this.EdtNomeCliente.getText(), this.EdtEnderecoCliente.getText(), this.EdtTelefoneCliente.getText());
+                atualizaInterface();
+                layout = (CardLayout) cards.getLayout();
+                layout.show(cards, "VisualizarCliente");
+            } catch (Exception erro) {
+                JOptionPane.showMessageDialog(null, erro.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            }
         } else if (e.getSource() == jMenuPagamento) {
 
             atualizaInterface();

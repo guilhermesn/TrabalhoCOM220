@@ -17,6 +17,7 @@ public class CtrlPousada implements Serializable {
 
     private ArrayList<Reserva> Reservas = new ArrayList<>();
     private ArrayList<Reserva> ReservasCanceladas = new ArrayList<>();
+    private ArrayList<Reserva> ReservasNaoPagas = new ArrayList<>();
     private ArrayList<Reserva> ReservasDoDia = new ArrayList<>();
     private ArrayList<Quarto> Quartos = new ArrayList<>();
     private ArrayList<Cliente> Clientes = new ArrayList<>();
@@ -46,16 +47,18 @@ public class CtrlPousada implements Serializable {
         if (Reservas.size() != 0) {
             for (int i = 0; i < Reservas.size(); i++) {
                 data2.setTime(Reservas.get(i).getEntrada());
+                if (Reservas.get(i).getPgtReserva().getSituacao() == false) {
+                        ReservasNaoPagas.add(Reservas.get(i));                        
+                    }
                 if (data2.get(Calendar.DAY_OF_YEAR) - 3 < HOJE.get(Calendar.DAY_OF_YEAR)) {
-                    if (Reservas.get(i).getPgtReserva().getSituacao() == false) {                        
+                    if (Reservas.get(i).getPgtReserva().getSituacao() == false) {
                         ReservasCanceladas.add(Reservas.get(i));
                         Reservas.remove(i);
                     }
                 }
                 if (data2.get(Calendar.DAY_OF_YEAR) - 3 == HOJE.get(Calendar.DAY_OF_YEAR)) {
-                    if (Reservas.get(i).getPgtReserva().getSituacao() == false) {                        
-                        ReservasDoDia.add(Reservas.get(i));
-                        Reservas.remove(i);
+                    if (Reservas.get(i).getPgtReserva().getSituacao() == false) {
+                        ReservasDoDia.add(Reservas.get(i));                        
                     }
                 }
             }
@@ -66,32 +69,58 @@ public class CtrlPousada implements Serializable {
         String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
         String nome = "";
         for (int i = 0; i < ReservasCanceladas.size(); i++) {
-            for(int n=0;n<Clientes.size();n++)
-            {
-                if(Clientes.get(n).getCPF() == ReservasCanceladas.get(i).getCpf())
+            for (int n = 0; n < Clientes.size(); n++) {
+                if (Clientes.get(n).getCPF().equals(ReservasCanceladas.get(i).getCpf())) {
                     nome = Clientes.get(n).getNome();
+                }
             }
             
             relatorio += i + "\t" + ReservasCanceladas.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasCanceladas.get(i).getEntrada() + "\t" + ReservasCanceladas.get(i).getDiarias().getValorTotal() +"\n";
         }          
         return relatorio;
     }
-    
-    public void GeraRelatorioReservaDoDia() {
+
+    public String GeraRelatorioReservaDoDia() {
         String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
         String nome = "";
         for (int i = 0; i < ReservasDoDia.size(); i++) {
-            for(int n=0;n<Clientes.size();n++)
-            {
-                if(Clientes.get(n).getCPF() == ReservasDoDia.get(i).getCpf())
+            for (int n = 0; n < Clientes.size(); n++) {
+                if (Clientes.get(n).getCPF().equals(ReservasDoDia.get(i).getCpf())) {
                     nome = Clientes.get(n).getNome();
+                }
             }
-            
-            relatorio += i + "\t" + ReservasDoDia.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasDoDia.get(i).getEntrada() + "\t" + ReservasDoDia.get(i).getDiarias().getValorTotal() +"\n";
-        }                
+
+            relatorio += i + "\t" + ReservasDoDia.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasDoDia.get(i).getEntrada() + "\t" + ReservasDoDia.get(i).getDiarias().getValorTotal() + "\n";
+        }
+        return relatorio;
+    }
+    
+    public String GeraRelatorioReservaNaoPaga() {
+        String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
+        String nome = "";
+        for (int i = 0; i < ReservasNaoPagas.size(); i++) {
+            for (int n = 0; n < Clientes.size(); n++) {
+                if (Clientes.get(n).getCPF().equals(ReservasNaoPagas.get(i).getCpf())) {
+                    nome = Clientes.get(n).getNome();
+                }
+            }
+
+            relatorio += i + "\t" + ReservasNaoPagas.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasNaoPagas.get(i).getEntrada() + "\t" + ReservasNaoPagas.get(i).getDiarias().getValorTotal() + "\n";
+        }
+        return relatorio;
     }
 
-    public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) {
+    public void CadastrarCliente(String CPF, String nome, String endereco, String telefone) throws Exception {
+        for (int i = 0; i < Clientes.size(); i++) {
+            if (Clientes.get(i).getCPF().equals(CPF)) {
+                throw new Exception("CPF já cadastrado");
+            }
+        }
+
+        if (CPF.isEmpty() || endereco.isEmpty() || telefone.isEmpty()) {
+            throw new Exception("Todos os campos são obrigatórios");
+        }
+
         Cliente cl = new Cliente(CPF, nome, endereco, telefone);
         Clientes.add(cl);
         arquiva();
@@ -113,13 +142,25 @@ public class CtrlPousada implements Serializable {
 
     }
 
-    public void CadastraQuarto(double preco, int numero, String descricao) {
+    public void CadastraQuarto(double preco, int numero, String descricao) throws Exception {
+        for (int i = 0; i < Quartos.size(); i++) {
+            if (Quartos.get(i).getNumero() == numero) {
+                throw new Exception("Número já cadastrado");
+            }
+        }
+
+        if (preco < 0 || numero < 0 || descricao.isEmpty()) {
+            throw new Exception("Todos os campos são obrigatórios");
+        }
         Quarto qt = new Quarto(preco, numero, descricao);
         this.Quartos.add(qt);
         arquiva();
     }
 
-    public void AlterarQuarto(double preco, int numero, String descricao) {
+    public void AlterarQuarto(double preco, int numero, String descricao) throws Exception{
+        if (preco < 0 || numero < 0 || descricao.isEmpty()) {
+            throw new Exception("Todos os campos são obrigatórios");
+        }
         for (int i = 0; i < this.Quartos.size(); i++) {
             if (this.Quartos.get(i).getNumero() == numero) {
                 this.Quartos.get(i).setDescricao(descricao);
@@ -130,7 +171,10 @@ public class CtrlPousada implements Serializable {
         arquiva();
     }
 
-    public void AlterarCliente(String CPF, String nome, String endereco, String telefone) {
+    public void AlterarCliente(String CPF, String nome, String endereco, String telefone) throws Exception{
+        if (CPF.isEmpty() || endereco.isEmpty() || telefone.isEmpty()) {
+            throw new Exception("Todos os campos são obrigatórios");
+        }
         for (int i = 0; i < this.Clientes.size(); i++) {
             if (this.Clientes.get(i).getCPF() == CPF) {
                 this.Clientes.get(i).setEndereco(endereco);
