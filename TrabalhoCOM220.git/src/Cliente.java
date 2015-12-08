@@ -9,11 +9,11 @@ public class Cliente implements Serializable{
     private String endereco;
     private String telefone;
 
-    public Cliente(String CPF, String nome, String endereco, String telefone) {
-        this.CPF = CPF;
-        this.nome = nome;
-        this.endereco = endereco;
-        this.telefone = telefone;
+    public Cliente(String CPF, String nome, String endereco, String telefone) {        
+        setCPF(CPF);
+        setNome(nome);
+        setEndereco(endereco);
+        setTelefone(telefone);
     }
 
     
