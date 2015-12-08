@@ -615,7 +615,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
         p2.add(BorderLayout.NORTH, dataInicial);
         p2.add(BorderLayout.NORTH, dataFinal);
         p2.add(BorderLayout.NORTH, bPesquisarQuartoDisponiveis);
-        p1.add(BorderLayout.SOUTH, bReservarQuartoDisponiveis);
+        //p1.add(BorderLayout.SOUTH, bReservarQuartoDisponiveis);
         p1.add(BorderLayout.NORTH, p2);
 
         return p1;
@@ -979,8 +979,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
                 String numeroReserva = jTabelaReserva.getValueAt(jTabelaReserva.getSelectedRow(), 0).toString();
                 int comfirmacao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja deletar a reserva?");
                 if (comfirmacao == 0) {
-                    modeloVRes.removeRow(jTabelaReserva.getSelectedRow());
+                    //modeloVRes.removeRow(jTabelaReserva.getSelectedRow());
                     controle.RemoverReserva(Integer.parseInt(numeroReserva));
+                     atualizaInterface();
+                    layout = (CardLayout) cards.getLayout();
+                    layout.show(cards, "VisualizarReserva");
                 }
 
             }
