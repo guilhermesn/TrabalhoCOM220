@@ -327,7 +327,32 @@ public class CtrlPousada implements Serializable {
         }
         return disponiveis;
     }
-
+    
+    public String relatorioPorData(Date Entrada, Date saida) {
+        ArrayList<Reserva> ReservaRelat = new ArrayList<>();
+        
+        for (int i = 0; i < this.Reservas.size(); i++) {
+            if (!((Entrada.after(this.Reservas.get(i).getSaida())) || (saida.before(this.Reservas.get(i).getEntrada())))) {
+                ReservaRelat.add(this.Reservas.get(i));
+            }
+        }
+        
+        String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
+        String nome = "";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");  
+        String date;
+        for (int i = 0; i < ReservaRelat.size(); i++) {
+            for (int n = 0; n < Clientes.size(); n++) {
+                if (Clientes.get(n).getCPF().equals(ReservaRelat.get(i).getCpf())) {
+                    nome = Clientes.get(n).getNome();
+                }
+            }
+            date = simpleDateFormat.format(ReservaRelat.get(i).getEntrada());
+            relatorio += i + "\t" + ReservaRelat.get(i).getNumeroReserva() + "\t" + nome + "\t" + date + "\t" + ReservaRelat.get(i).getDiarias().getValorTotal() +"\n";
+        }          
+        return relatorio;
+    }
+    
     public double TotalDiarias(Date entrada, Date saida, ArrayList<Quarto> vectorQuartos) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar data1 = Calendar.getInstance();

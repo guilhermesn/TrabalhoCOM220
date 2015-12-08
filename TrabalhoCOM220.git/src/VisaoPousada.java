@@ -320,7 +320,7 @@ public class VisaoPousada extends JFrame implements ActionListener {
                     dateini = formatter.parse(dataInicial.getText());
                     datefim = formatter.parse(dataFinal.getText());
 
-                    textArea.setText(controle.GeraRelatorioReservaCancelada());
+                    textArea.setText(controle.relatorioPorData(dateini,datefim));
 
                 } catch (ParseException ex) {
                     Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
