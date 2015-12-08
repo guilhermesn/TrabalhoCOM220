@@ -1,4 +1,11 @@
+package COM220.Control;
 
+
+import COM220.View.VisaoPousada;
+import COM220.Model.Pagamento;
+import COM220.Model.Quarto;
+import COM220.Model.Reserva;
+import COM220.Model.Cliente;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

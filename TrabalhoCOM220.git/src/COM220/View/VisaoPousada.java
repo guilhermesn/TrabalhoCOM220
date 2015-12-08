@@ -1,4 +1,8 @@
+package COM220.View;
 
+
+import COM220.Control.CtrlPousada;
+import COM220.Model.Quarto;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.FlowLayout;

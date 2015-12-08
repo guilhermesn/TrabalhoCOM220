@@ -1,3 +1,5 @@
+package COM220.View;
+
 
 import javax.swing.table.DefaultTableModel;
 
