@@ -1,6 +1,9 @@
 
+import java.io.Serializable;
 
-public class Pagamento {
+
+
+public class Pagamento implements Serializable{
     private double valorTotal;
     private double valorPg;
     private Boolean situacao = false;
