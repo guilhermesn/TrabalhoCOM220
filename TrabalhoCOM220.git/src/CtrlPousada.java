@@ -2,14 +2,17 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Scanner;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
@@ -64,7 +67,16 @@ public class CtrlPousada implements Serializable {
             }
         }
     }
-
+    
+    public void SalvarRelatorioReservaCancelada(String endereco) throws IOException {
+        FileWriter arq = new FileWriter(endereco+"/RelatorioReservaCancelada.txt");
+        PrintWriter gravarArq = new PrintWriter(arq);
+        Date hoje = new Date(System.currentTimeMillis());
+        gravarArq.printf("Relatorio de reservas canceladas do dia "+hoje.toString()+"\n\n\n");
+        gravarArq.printf(GeraRelatorioReservaCancelada());
+        arq.close();
+    }
+    
     public String GeraRelatorioReservaCancelada() {
         String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
         String nome = "";
@@ -81,7 +93,16 @@ public class CtrlPousada implements Serializable {
         }          
         return relatorio;
     }
-
+    
+    public void SalvarRelatorioReservaDoDia(String endereco) throws IOException {
+        FileWriter arq = new FileWriter(endereco+"/RelatorioAEfetivarDoDia.txt");
+        PrintWriter gravarArq = new PrintWriter(arq);
+        Date hoje = new Date(System.currentTimeMillis());
+        gravarArq.printf("Relatorio de reservas a efetivar do "+hoje.toString()+"\n\n\n");
+        gravarArq.printf(GeraRelatorioReservaDoDia());
+        arq.close();
+    }
+    
     public String GeraRelatorioReservaDoDia() {
         String relatorio = "Número\tNúmero da Reserva\tNome do Cliente\tData Prevista\tValor\n";
         String nome = "";
@@ -95,6 +116,15 @@ public class CtrlPousada implements Serializable {
             relatorio += i + "\t" + ReservasDoDia.get(i).getNumeroReserva() + "\t" + nome + "\t" + ReservasDoDia.get(i).getEntrada() + "\t" + ReservasDoDia.get(i).getDiarias().getValorTotal() + "\n";
         }
         return relatorio;
+    }
+    
+    public void SalvarRelatorioReservaNaoPaga(String endereco) throws IOException {
+        FileWriter arq = new FileWriter(endereco+"/RelatorioReservaNaoPaga.txt");
+        PrintWriter gravarArq = new PrintWriter(arq);
+        Date hoje = new Date(System.currentTimeMillis());
+        gravarArq.printf("Relatorio de reservas nao pagas do dia "+hoje.toString()+"\n\n\n");
+        gravarArq.printf(GeraRelatorioReservaNaoPaga());
+        arq.close();
     }
     
     public String GeraRelatorioReservaNaoPaga() {
@@ -326,6 +356,15 @@ public class CtrlPousada implements Serializable {
             }
         }
         return disponiveis;
+    }
+    
+    public void SalvarRelatorioPorData(String endereco,Date Entrada, Date Saida) throws IOException {
+        FileWriter arq = new FileWriter(endereco+"/RelatorioPorData.txt");
+        PrintWriter gravarArq = new PrintWriter(arq);
+        Date hoje = new Date(System.currentTimeMillis());
+        gravarArq.printf("Relatorio de reservas por data do dia "+hoje.toString()+"\n\n\n");
+        gravarArq.printf(relatorioPorData(Entrada,Saida));
+        arq.close();
     }
     
     public String relatorioPorData(Date Entrada, Date saida) {

@@ -321,7 +321,24 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         bEscolherPasta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                escolheArquivo();
+                Date dateini;
+                Date datefim;
+
+                try {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    dateini = formatter.parse(dataInicial.getText());
+                    datefim = formatter.parse(dataFinal.getText());
+
+                    textArea1.setText(controle.relatorioPorData(dateini, datefim));
+                    try {
+                         controle.SalvarRelatorioPorData(escolheArquivo(),dateini,datefim);
+                    } catch (IOException ex) {
+                        Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } catch (ParseException ex) {
+                    Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
             }
         });
         JScrollPane scrollPane = new JScrollPane(textArea1);
@@ -379,7 +396,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         bEscolherPasta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                escolheArquivo();
+                try {
+                    controle.SalvarRelatorioReservaDoDia(escolheArquivo());
+                } catch (IOException ex) {
+                    Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         JScrollPane scrollPane = new JScrollPane(textArea2);
@@ -411,7 +432,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         bEscolherPasta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                escolheArquivo();
+                try {
+                    controle.SalvarRelatorioReservaCancelada(escolheArquivo());
+                } catch (IOException ex) {
+                    Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         JScrollPane scrollPane = new JScrollPane(textArea3);
@@ -441,7 +466,11 @@ public class VisaoPousada extends JFrame implements ActionListener {
 
         bEscolherPasta.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                escolheArquivo();
+                try {
+                    controle.SalvarRelatorioReservaNaoPaga(escolheArquivo());
+                } catch (IOException ex) {
+                    Logger.getLogger(VisaoPousada.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         JScrollPane scrollPane = new JScrollPane(textArea4);
