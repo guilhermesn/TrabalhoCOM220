@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
-public class CtrlPousada {
+public class CtrlPousada implements Serializable {
 
     private ArrayList<Reserva> Reservas = new ArrayList<>();
     private ArrayList<Quarto> Quartos = new ArrayList<>();
